@@ -1,0 +1,65 @@
+gui-name:
+  note: '<dark_green><bold>音高调节</bold></dark_green>'
+  instrument: '<dark_green><bold>乐器调节</bold></dark_green>'
+  settings: '<dark_green><bold>设置</bold></dark_green>'
+
+error:
+  no-perms: '<red>错误: 你没有权限</red>'
+  invalid-command: '<red>错误: 命令语法不正确</red>'
+  invalid-note: '<red>错误: 音高不正确</red>'
+  invalid-instrument: '<red>错误: 乐器不存在</red>'
+  invalid-noteblock-pos: '<red>错误: 无法同步超出世界的位置</red>'
+  not-facing-noteblock: '<red>错误: 你没有面向音符盒</red>'
+  not-handing-noteblock: '<red>错误: 你没有手持音符盒</red>'
+
+settings:
+  note: '<dark_aqua>启用调音棒设置音高(右键)</dark_aqua>'
+  instrument: '<dark_aqua>启用调音棒设置乐器(左键)</dark_aqua>'
+  sync-instrument: '<dark_aqua>同步方块(设置音符盒乐器时会同时更改音符盒下的方块)</dark_aqua>'
+  scroll-item: '<dark_aqua>启用鼠标滚轮调整手中音符盒的音高(手持音符盒时切换副手激活)</dark_aqua>'
+  scroll-block: '<dark_aqua>启用鼠标滚轮调整看向的音符盒的音高(需要手持调音棒, 切换副手激活)</dark_aqua>'
+  no-perm-name: '<red>你没有权限设置该项目</red>'
+  enabled: '<green>已启用, 点击禁用</green>'
+  disabled: '<red>已禁用, 点击启用</red>'
+
+notice:
+  plugin-reloaded: '<aqua>插件重载完成</aqua>'
+  get-tunestick: '<aqua>你获得了一个调音棒</aqua>'
+  scroll-item-activate: '<green>已启用物品滚轮调音模式</green>'
+  scroll-item-deactivate: '<red>已禁用物品滚轮调音模式</red>'
+  scroll-block-activate: '<green>已启用方块滚轮调音模式</green>'
+  scroll-block-deactivate: '<red>已禁用方块滚轮调音模式</red>'
+
+item:
+  noteblock-name: '<aqua>%s (%s)</aqua>'
+  tunestick-name: '<aqua>PaperBlockTuner 调音棒</aqua>'
+  tunestick-lore: '<green>放于手中, 点击音符盒即可调音</green>'
+
+display:
+  info-pattern: '<aqua>%s (%s)</aqua>'
+
+instrument:
+  harp: '<aqua>钢琴</aqua>'
+  bass: '<aqua>贝斯</aqua>'
+  snare: '<aqua>小军鼓</aqua>'
+  hat: '<aqua>踩镲</aqua>'
+  basedrum: '<aqua>底鼓</aqua>'
+  bell: '<aqua>钟琴</aqua>'
+  flute: '<aqua>长笛</aqua>'
+  chime: '<aqua>管钟</aqua>'
+  guitar: '<aqua>吉他</aqua>'
+  xylophone: '<aqua>木琴</aqua>'
+  iron_xylophone: '<aqua>颤音琴</aqua>'
+  cow_bell: '<aqua>牛铃</aqua>'
+  didgeridoo: '<aqua>迪吉里杜管</aqua>'
+  bit: '<aqua>方波</aqua>'
+  banjo: '<aqua>班卓琴</aqua>'
+  pling: '<aqua>电钢琴</aqua>'
+  zombie: '<aqua>僵尸</aqua>'
+  skeleton: '<aqua>骷髅</aqua>'
+  creeper: '<aqua>苦力怕</aqua>'
+  dragon: '<aqua>末影龙</aqua>'
+  wither_skeleton: '<aqua>凋零骷髅</aqua>'
+  piglin: '<aqua>猪灵</aqua>'
+  default: '<aqua>默认(根据下方方块决定)</aqua>'
+  empty: '<aqua>音符盒</aqua>'
