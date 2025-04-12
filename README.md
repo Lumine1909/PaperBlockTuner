@@ -1,3 +1,7 @@
+
+<img src="https://github.com/user-attachments/assets/5060e51a-3496-45a7-a343-91ce92f5b4b4" alt="PaperBlockTuner" width="128" height="128" style="vertical-align: middle; margin-right: 2px;" />
+
+
 # PaperBlockTuner
 
 **PaperBlockTuner** is a Minecraft plugin for [Paper](https://papermc.io/downloads/paper) and downstream servers that allows players to interactively edit note blocks using command and tool item.
