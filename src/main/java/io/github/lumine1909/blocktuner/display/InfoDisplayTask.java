@@ -60,7 +60,7 @@ public class InfoDisplayTask extends BukkitRunnable {
         }
         NoteBlockData data = new NoteBlockData(noteBlock);
         if (cache.containsKey(player.getUniqueId()) && update) {
-            FakeArmorStandDisplay.updateArmor(player, target.getLocation().add(0.5, 1, 0.5), Message.translatable("display.info-pattern", data.getInstrument(), data.getNote()));
+            FakeArmorStandDisplay.updateArmor(player, Message.translatable("display.info-pattern", data.getInstrument(), data.getNote()));
         } else {
             FakeArmorStandDisplay.addArmor(player, target.getLocation().add(0.5, 1, 0.5), Message.translatable("display.info-pattern", data.getInstrument(), data.getNote()));
         }

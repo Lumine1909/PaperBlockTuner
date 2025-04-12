@@ -7,7 +7,6 @@ import io.github.lumine1909.blocktuner.util.NoteUtil;
 import io.github.lumine1909.blocktuner.util.TuneUtil;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.configuration.GlobalConfiguration;
-import io.papermc.paper.event.player.PlayerPickItemEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -78,31 +77,33 @@ public class BlockTunerProtocol {
         }
         ServerLevel serverLevel = player.serverLevel();
         BlockPos blockPos = packet.pos();
-        if (player.canInteractWithBlock(blockPos, 1.0F) && serverLevel.isLoaded(blockPos)) {
-            BlockState blockState = serverLevel.getBlockState(blockPos);
-            if (!(blockState.getBlock() instanceof NoteBlock)) {
-                return false;
-            }
-            boolean flag = player.hasInfiniteMaterials() && packet.includeData();
-            ItemStack cloneItemStack = blockState.getCloneItemStack(serverLevel, blockPos, flag);
-            if (!cloneItemStack.isEmpty()) {
-                if (flag && player.getBukkitEntity().hasPermission("minecraft.nbt.copy")) {
-                    addBlockDataToItem(blockState, serverLevel, blockPos, cloneItemStack);
-                }
-                final ItemStack toPick;
-                if (flag) {
-                    org.bukkit.inventory.ItemStack bukkitItemStack = CraftItemStack.asBukkitCopy(cloneItemStack);
-                    NoteBlockInstrument instrument = blockState.getValue(NoteBlock.INSTRUMENT);
-                    Integer note = blockState.getValue(NoteBlock.NOTE);
-                    NoteBlockData data = new NoteBlockData(note, InstrumentUtil.byMcName(instrument.name().toLowerCase()));
-                    bukkitItemStack = data.apply(bukkitItemStack);
-                    toPick = CraftItemStack.asNMSCopy(bukkitItemStack);
-                } else {
-                    toPick = cloneItemStack;
-                }
-                Bukkit.getScheduler().runTask(plugin, () -> tryPickItem(toPick, player));
-            }
+        if (!player.canInteractWithBlock(blockPos, 1.0F) || !serverLevel.isLoaded(blockPos)) {
+            return true;
         }
+        BlockState blockState = serverLevel.getBlockState(blockPos);
+        if (!(blockState.getBlock() instanceof NoteBlock)) {
+            return false;
+        }
+        boolean flag = player.hasInfiniteMaterials() && packet.includeData();
+        ItemStack cloneItemStack = blockState.getCloneItemStack(serverLevel, blockPos, flag);
+        if (cloneItemStack.isEmpty()) {
+            return true;
+        }
+        if (flag && player.getBukkitEntity().hasPermission("minecraft.nbt.copy")) {
+            addBlockDataToItem(blockState, serverLevel, blockPos, cloneItemStack);
+        }
+        final ItemStack toPick;
+        if (flag) {
+            org.bukkit.inventory.ItemStack bukkitItemStack = CraftItemStack.asBukkitCopy(cloneItemStack);
+            NoteBlockInstrument instrument = blockState.getValue(NoteBlock.INSTRUMENT);
+            Integer note = blockState.getValue(NoteBlock.NOTE);
+            NoteBlockData data = new NoteBlockData(note, InstrumentUtil.byMcName(instrument.name().toLowerCase()));
+            bukkitItemStack = data.apply(bukkitItemStack);
+            toPick = CraftItemStack.asNMSCopy(bukkitItemStack);
+        } else {
+            toPick = cloneItemStack;
+        }
+        Bukkit.getScheduler().runTask(plugin, () -> tryPickItem(toPick, player));
         return true;
     }
 
@@ -117,30 +118,25 @@ public class BlockTunerProtocol {
     }
 
     private static void tryPickItem(ItemStack stack, ServerPlayer player) {
-        if (stack.isItemEnabled(player.level().enabledFeatures())) {
-            Inventory inventory = player.getInventory();
-            int i = inventory.findSlotMatchingItem(stack);
-            int targetSlot = Inventory.isHotbarSlot(i) ? i : inventory.getSuitableHotbarSlot();
-            Player bukkitPlayer = player.getBukkitEntity();
-            PlayerPickItemEvent event = new PlayerPickItemEvent(bukkitPlayer, targetSlot, i);
-            if (!event.callEvent()) {
-                return;
+        if (!stack.isItemEnabled(player.level().enabledFeatures())) {
+            return;
+        }
+        Inventory inventory = player.getInventory();
+        int sourceSlot = inventory.findSlotMatchingItem(stack);
+        int targetSlot = Inventory.isHotbarSlot(sourceSlot) ? sourceSlot : inventory.getSuitableHotbarSlot();
+        if (sourceSlot != -1) {
+            if (Inventory.isHotbarSlot(sourceSlot) && Inventory.isHotbarSlot(targetSlot)) {
+                inventory.selected = targetSlot;
+            } else {
+                inventory.pickSlot(sourceSlot, targetSlot);
             }
-            i = event.getSourceSlot();
-            if (i != -1) {
-                if (Inventory.isHotbarSlot(i) && Inventory.isHotbarSlot(event.getTargetSlot())) {
-                    inventory.selected = event.getTargetSlot();
-                } else {
-                    inventory.pickSlot(i, event.getTargetSlot());
-                }
-            } else if (player.hasInfiniteMaterials()) {
-                inventory.addAndPickItem(stack, event.getTargetSlot());
-            }
-            player.connection.send(new ClientboundSetHeldSlotPacket(inventory.selected));
-            player.inventoryMenu.broadcastChanges();
-            if (GlobalConfiguration.get().unsupportedSettings.updateEquipmentOnPlayerActions) {
-                player.detectEquipmentUpdatesPublic();
-            }
+        } else if (player.hasInfiniteMaterials()) {
+            inventory.addAndPickItem(stack, targetSlot);
+        }
+        player.connection.send(new ClientboundSetHeldSlotPacket(inventory.selected));
+        player.inventoryMenu.broadcastChanges();
+        if (GlobalConfiguration.get().unsupportedSettings.updateEquipmentOnPlayerActions) {
+            player.detectEquipmentUpdatesPublic();
         }
     }
 }

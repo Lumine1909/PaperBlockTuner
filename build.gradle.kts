@@ -21,6 +21,7 @@ dependencies {
     compileOnly("org.reflections:reflections:0.10.2")
     compileOnly("org.xerial:sqlite-jdbc:3.49.1.0")
 }
+
 tasks {
     assemble {
         dependsOn(shadowJar)

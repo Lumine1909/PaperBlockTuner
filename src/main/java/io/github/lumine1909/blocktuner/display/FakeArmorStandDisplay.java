@@ -45,7 +45,7 @@ public class FakeArmorStandDisplay {
         )));
     }
 
-    public static void updateArmor(Player player, Location location, Component name) {
+    public static void updateArmor(Player player, Component name) {
         ServerPlayer sp = ((CraftPlayer) player).getHandle();
         sp.connection.send(new ClientboundSetEntityDataPacket(ENTITY_ID, List.of(
             SynchedEntityData.DataValue.create((EntityDataAccessor<Optional<net.minecraft.network.chat.Component>>) accessField(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name)))
