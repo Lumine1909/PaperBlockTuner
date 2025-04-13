@@ -20,8 +20,7 @@ import static io.github.lumine1909.blocktuner.command.core.CommandHandler.regist
 public class BlockTunerPlugin extends JavaPlugin {
 
     /*TODO:
-    1. Github ci
-    2. Optimize tab complete
+    1. Optimize tab complete
     */
 
     public static BlockTunerPlugin plugin;

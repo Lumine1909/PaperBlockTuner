@@ -5,7 +5,8 @@ plugins {
 }
 
 group = "io.github.lumine1909"
-version = "1.2.0"
+version = "1.2.1"
+description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
     mavenCentral()
@@ -30,5 +31,21 @@ tasks {
     shadowJar {
         archiveFileName.set("PaperBlockTuner-${version}-MC-1.21.4.jar")
         minimize()
+    }
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+    processResources {
+        filteringCharset = Charsets.UTF_8.name()
+        val props = mapOf(
+            "name" to project.name,
+            "version" to project.version,
+            "description" to project.description,
+            "apiVersion" to "1.20"
+        )
+        inputs.properties(props)
+        filesMatching("plugin.yml") {
+            expand(props)
+        }
     }
 }
