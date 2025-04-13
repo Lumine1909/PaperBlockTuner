@@ -6,6 +6,7 @@ import io.github.lumine1909.blocktuner.gui.InstrumentTuneGui;
 import io.github.lumine1909.blocktuner.gui.NoteTuneGui;
 import io.github.lumine1909.blocktuner.gui.SettingsGui;
 import io.github.lumine1909.blocktuner.listener.*;
+import io.github.lumine1909.blocktuner.metrics.Metrics;
 import io.github.lumine1909.blocktuner.util.Message;
 import io.github.lumine1909.blocktuner.util.StorageUtil;
 import org.bukkit.Bukkit;
@@ -39,6 +40,7 @@ public class BlockTunerPlugin extends JavaPlugin {
             PlayerData.of(player);
         }
         displayTask = new InfoDisplayTask().runTaskTimer(this, 0, 2);
+        new Metrics(this, 25453);
     }
 
     @Override
