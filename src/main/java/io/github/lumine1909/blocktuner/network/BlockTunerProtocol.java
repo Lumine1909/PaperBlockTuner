@@ -30,7 +30,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
 
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 

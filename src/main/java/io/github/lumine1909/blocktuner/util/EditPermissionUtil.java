@@ -12,7 +12,7 @@ public class EditPermissionUtil {
         if (player.hasPermission("blocktuner.admin")) {
             return true;
         }
-        if (!hasPlotSquared()) {
+        if (hasPlotSquared()) {
             Plot plot = Plot.getPlot(
                 com.plotsquared.core.location.Location.at(
                     location.getWorld().getName(),

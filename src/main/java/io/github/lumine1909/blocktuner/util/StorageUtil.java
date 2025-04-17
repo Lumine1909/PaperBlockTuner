@@ -23,7 +23,6 @@ public class StorageUtil {
         );
         """;
 
-
     public static PlayerData loadOrCreate(Player player) {
         PlayerData data = new PlayerData(player);
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_PATH)) {
