@@ -33,6 +33,7 @@ public class BlockTunerPlugin extends JavaPlugin {
         plugin = this;
         DATABASE_PATH = new File(getDataFolder(), "playerdata.db").getAbsolutePath();
         callReload();
+        StorageUtil.initDatabase();
         registerEvents();
         registerCommands();
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -56,7 +57,6 @@ public class BlockTunerPlugin extends JavaPlugin {
 
     public void callReload() {
         Message.init();
-        StorageUtil.initDatabase();
         NoteTuneGui.init();
         InstrumentTuneGui.init();
         SettingsGui.init();
