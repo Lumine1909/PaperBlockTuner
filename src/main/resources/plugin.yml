@@ -8,3 +8,30 @@ api-version: $apiVersion
 description: $description
 authors:
   - Lumine1909
+permissions:
+  blocktuner.command.base:
+    default: op
+  blocktuner.command.settings:
+    default: op
+  blocktuner.command.tune:
+    default: op
+  blocktuner.command.tunehand:
+    default: true
+  blocktuner.command.tunestick:
+    default: op
+  blocktuner.settings.note-tuning:
+    default: op
+  blocktuner.settings.instrument-tuning:
+    default: op
+  blocktuner.settings.scroll-item:
+    default: true
+  blocktuner.settings.scroll-block:
+    default: op
+  blocktuner.settings.sync-instrument:
+    default: op
+  blocktuner.playnote:
+    default: op
+  blocktuner.edit:
+    default: op
+  blocktuner.admin:
+    default: op
