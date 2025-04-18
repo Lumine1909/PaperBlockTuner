@@ -3,7 +3,6 @@ package io.github.lumine1909.blocktuner.listener;
 import io.github.lumine1909.blocktuner.data.PlayerData;
 import io.github.lumine1909.blocktuner.object.Instrument;
 import io.github.lumine1909.blocktuner.util.*;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,21 +25,17 @@ public class ScrollTuningListener implements Listener {
     @EventHandler
     public void onItemSwap(PlayerSwapHandItemsEvent event) {
         PlayerData data = PlayerData.of(event.getPlayer());
-        if (event.getOffHandItem().getType() == Material.NOTE_BLOCK) {
-            if (data.enableItemScrollTuning) {
-                boolean bl = !data.isItemScrollTuning;
-                PlayerData.of(event.getPlayer()).isItemScrollTuning = bl;
-                event.getPlayer().sendMessage(bl ? Message.translatable("notice.scroll-item-activate") : Message.translatable("notice.scroll-item-deactivate"));
-                event.setCancelled(true);
-            }
+        if (event.getOffHandItem().getType() == Material.NOTE_BLOCK && data.enableItemScrollTuning) {
+            boolean bl = !data.isItemScrollTuning;
+            PlayerData.of(event.getPlayer()).isItemScrollTuning = bl;
+            event.getPlayer().sendMessage(bl ? Message.translatable("notice.scroll-item-activate") : Message.translatable("notice.scroll-item-deactivate"));
+            event.setCancelled(true);
         }
-        if (TuneStickUtil.isTuneStick(event.getOffHandItem())) {
-            if (data.enableBlockScrollTuning) {
-                boolean bl = !data.isBlockScrollTuning;
-                PlayerData.of(event.getPlayer()).isBlockScrollTuning = bl;
-                event.getPlayer().sendMessage(bl ? Message.translatable("notice.scroll-block-activate") : Message.translatable("notice.scroll-block-deactivate"));
-                event.setCancelled(true);
-            }
+        if (TuneStickUtil.isTuneStick(event.getOffHandItem()) && data.enableBlockScrollTuning) {
+            boolean bl = !data.isBlockScrollTuning;
+            PlayerData.of(event.getPlayer()).isBlockScrollTuning = bl;
+            event.getPlayer().sendMessage(bl ? Message.translatable("notice.scroll-block-activate") : Message.translatable("notice.scroll-block-deactivate"));
+            event.setCancelled(true);
         }
     }
 

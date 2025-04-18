@@ -63,6 +63,4 @@ public class BlockTunerCommand implements TabExecutor {
         }
         return Collections.emptyList();
     }
-
-
 }

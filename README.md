@@ -44,7 +44,7 @@ The resulting `.jar` will be located in `build/libs/`.
 
 | **Command**            | **Description**                                      | **Permission**                 |
 |------------------------|------------------------------------------------------|--------------------------------|
-| `/blocktuner`          | Opens the main menu / settings GUI.                  | `blocktuner.command.base`      |
+| `/blocktuner`          | Main command.                                        | `blocktuner.command.base`      |
 | `/blocktuner reload`   | Reload the plugin.                                   | `blocktuner.admin`             |
 | `/blocktuner settings` | Opens the tuning settings GUI.                       | `blocktuner.command.settings`  |
 | `/tune`                | Tunes the block or item the player is aiming.        | `blocktuner.command.tune`      |
@@ -53,21 +53,21 @@ The resulting `.jar` will be located in `build/libs/`.
 
 ### Permissions
 
-| **Permission**                              | **Description**                                                                |
-|---------------------------------------------|--------------------------------------------------------------------------------|
-| `blocktuner.command.base`                   | Allows access to the main `/blocktuner` command.                               |
-| `blocktuner.command.settings`               | Grants access to open the settings GUI.                                        |
-| `blocktuner.command.tune`                   | Allows use of the `/tune` command to open the note tuning GUI.                 |
-| `blocktuner.command.tunehand`               | Allows use of `/tunehand` to tune the item/block in hand.                      |
-| `blocktuner.command.tunestick`              | Allows get a tuning a stick for interactive tuning (left/right-click).         |
-| `blocktuner.settings.note-tuning`           | Allows toggling note tuning in the settings GUI.                               |
-| `blocktuner.settings.instrument-tuning`     | Allows toggling instrument tuning in the settings GUI.                         |
-| `blocktuner.settings.scroll-item`           | Allows enabling scroll-wheel tuning for held items.                            |
-| `blocktuner.settings.scroll-block`          | Allows enabling scroll-wheel tuning for blocks.                                |
-| `blocktuner.settings.sync-instrument`       | Allows enabling sync of block instrument type when tuning.                     |
-| `blocktuner.playnote`                       | Allows a player to trigger note playback (used during tuning).                 |
-| `blocktuner.edit`                           | General edit permission for tuning actions.                                    |
-| `blocktuner.admin`                          | Grants access to administrative features and full control over plugin actions. |
+| **Permission**                          | **Description**                                                                |
+|-----------------------------------------|--------------------------------------------------------------------------------|
+| `blocktuner.command.base`               | Allows access to the main command `/blocktuner`.                               |
+| `blocktuner.command.settings`           | Allows access to open the settings GUI.                                        |
+| `blocktuner.command.tune`               | Allows use of the `/tune` command to tune the aiming noteblock.                |
+| `blocktuner.command.tunehand`           | Allows use of `/tunehand` to tune the item/block in hand.                      |
+| `blocktuner.command.tunestick`          | Allows get a tuning a stick for interactive tuning (left/right-click).         |
+| `blocktuner.settings.note-tuning`       | Allows toggling note tuning in the settings GUI.                               |
+| `blocktuner.settings.instrument-tuning` | Allows toggling instrument tuning in the settings GUI.                         |
+| `blocktuner.settings.scroll-item`       | Allows enabling scroll-wheel tuning for held items.                            |
+| `blocktuner.settings.scroll-block`      | Allows enabling scroll-wheel tuning for blocks.                                |
+| `blocktuner.settings.sync-instrument`   | Allows enabling sync of block instrument type when tuning.                     |
+| `blocktuner.playnote`                   | Allows a player to play note with a blaze rod.                                 |
+| `blocktuner.edit`                       | General edit permission for block tuning actions.                              |
+| `blocktuner.admin`                      | Allows access to administrative features and full control over plugin actions. |
 
 
 ### GUI
