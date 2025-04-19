@@ -24,6 +24,11 @@ dependencies {
     compileOnly("org.xerial:sqlite-jdbc:3.49.1.0")
 }
 
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+
 tasks {
     assemble {
         dependsOn(shadowJar)
