@@ -22,7 +22,7 @@ public class BlockTunerCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (!(sender instanceof Player player) || !player.hasPermission("blocktuner.command.base")) {
-            sender.sendMessage(Message.translatable("error.no-perm"));
+            sender.sendMessage(Message.translatable("error.no-permission"));
             return true;
         }
         if (args.length == 0) {

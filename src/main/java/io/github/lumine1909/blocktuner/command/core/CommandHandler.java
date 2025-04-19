@@ -1,20 +1,30 @@
 package io.github.lumine1909.blocktuner.command.core;
 
+import io.github.lumine1909.blocktuner.command.BlockTunerCommand;
+import io.github.lumine1909.blocktuner.command.TuneCommand;
+import io.github.lumine1909.blocktuner.command.TuneHandCommand;
+import io.github.lumine1909.blocktuner.command.TuneStickCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.Plugin;
-import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.List;
 
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
 public class CommandHandler {
 
     private static final Constructor<PluginCommand> CONSTRUCTOR_PluginCommand;
+    private static final List<Class<?>> COMMAND_CLASSES = List.of(
+        BlockTunerCommand.class,
+        TuneCommand.class,
+        TuneHandCommand.class,
+        TuneStickCommand.class
+    );
 
     static {
         try {
@@ -26,10 +36,9 @@ public class CommandHandler {
     }
 
     public static void registerCommands() {
-        Reflections reflections = new Reflections("io.github.lumine1909.blocktuner.command");
         CommandMap commandMap = Bukkit.getCommandMap();
 
-        for (Class<?> clazz : reflections.getTypesAnnotatedWith(RegisterCommand.class)) {
+        for (Class<?> clazz : COMMAND_CLASSES) {
             if (!TabExecutor.class.isAssignableFrom(clazz)) {
                 continue;
             }

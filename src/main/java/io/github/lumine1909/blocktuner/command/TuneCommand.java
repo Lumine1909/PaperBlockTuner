@@ -21,7 +21,7 @@ public class TuneCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (!(sender instanceof Player player) || !player.hasPermission("blocktuner.command.tune")) {
-            sender.sendMessage(Message.translatable("error.no-perm"));
+            sender.sendMessage(Message.translatable("error.no-permission"));
             return true;
         }
         if (args.length == 0 || args.length > 2) {

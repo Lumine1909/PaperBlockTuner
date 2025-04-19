@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.lumine1909"
-version = "1.2.3"
+version = "1.2.4"
 description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
@@ -22,6 +22,11 @@ dependencies {
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")
     compileOnly("org.reflections:reflections:0.10.2")
     compileOnly("org.xerial:sqlite-jdbc:3.49.1.0")
+}
+
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 tasks {

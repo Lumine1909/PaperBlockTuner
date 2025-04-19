@@ -41,10 +41,6 @@ public class Message {
         SET_INSTRUMENT_SUGGESTIONS = instrumentBuilder.build();
     }
 
-    private static String color(String str) {
-        return ChatColor.translateAlternateColorCodes('&', str);
-    }
-
     private static void loadConfig() {
         File transFile = new File(plugin.getDataFolder(), "translation.yml");
         if (transFile.isDirectory()) {
@@ -55,7 +51,10 @@ public class Message {
         }
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(transFile);
         for (String key : cfg.getKeys(true)) {
-            translations.put(key, color(cfg.getString(key)));
+            String translate = cfg.getString(key);
+            if (translate != null) {
+                translations.put(key, translate);
+            }
         }
     }
 
@@ -64,7 +63,7 @@ public class Message {
     }
 
     public static Component translatable(String key, Object... args) {
-        String translated = String.format(translate(key), args);
+        String translated = translate(key).formatted(args);
         return MiniMessage.miniMessage().deserialize(translated).decoration(TextDecoration.ITALIC, false);
     }
 }
