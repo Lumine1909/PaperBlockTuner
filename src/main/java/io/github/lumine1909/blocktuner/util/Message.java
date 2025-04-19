@@ -54,7 +54,6 @@ public class Message {
             String translate = cfg.getString(key);
             if (translate != null) {
                 translations.put(key, translate);
-                System.out.println(key + " " + translate);
             }
         }
     }
