@@ -4,7 +4,7 @@ gui-name:
   settings: '<dark_green><bold>设置</bold></dark_green>'
 
 error:
-  no-perms: '<red>错误: 你没有权限</red>'
+  no-permission: '<red>错误: 你没有权限</red>'
   invalid-command: '<red>错误: 命令语法不正确</red>'
   invalid-note: '<red>错误: 音高不正确</red>'
   invalid-instrument: '<red>错误: 乐器不存在</red>'
