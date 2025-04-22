@@ -52,11 +52,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder fakeEnch(boolean flag) {
-        if (!flag) {
-            return this;
-        }
-        itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
-        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemMeta.setEnchantmentGlintOverride(flag);
         return this;
     }
 
