@@ -5,6 +5,7 @@ import io.github.lumine1909.blocktuner.object.Instrument;
 import io.github.lumine1909.blocktuner.util.InstrumentUtil;
 import io.github.lumine1909.blocktuner.util.NoteUtil;
 import io.github.lumine1909.blocktuner.util.TuneUtil;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import net.minecraft.core.BlockPos;
@@ -54,7 +55,7 @@ public class BlockTunerProtocol {
         if (id.equals(SERVER_BOUND_HELLO)) {
             int protocolVersion = buf.readInt();
             if (protocolVersion == TUNING_PROTOCOL) {
-                player.connection.send(new ClientboundCustomPayloadPacket(new DiscardedPayload(CLIENT_BOUND_HELLO, buf.array())));
+                player.connection.send(new ClientboundCustomPayloadPacket(new DiscardedPayload(CLIENT_BOUND_HELLO, ByteBufUtil.getBytes(buf))));
             }
             return true;
         } else if (id.equals(SERVER_BOUND_TUNING)) {

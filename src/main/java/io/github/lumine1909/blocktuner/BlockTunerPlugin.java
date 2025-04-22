@@ -20,10 +20,6 @@ import static io.github.lumine1909.blocktuner.command.core.CommandHandler.regist
 
 public class BlockTunerPlugin extends JavaPlugin {
 
-    /*TODO:
-    1. Optimize tab complete
-    */
-
     public static BlockTunerPlugin plugin;
     public static BukkitTask displayTask;
     public static String DATABASE_PATH;

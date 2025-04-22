@@ -2,6 +2,7 @@ package io.github.lumine1909.blocktuner.command;
 
 import io.github.lumine1909.blocktuner.command.core.RegisterCommand;
 import io.github.lumine1909.blocktuner.data.NoteBlockData;
+import io.github.lumine1909.blocktuner.util.CommandUtil;
 import io.github.lumine1909.blocktuner.util.Message;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.NoteBlock;
@@ -45,23 +46,23 @@ public class TuneCommand implements TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (args.length == 1) {
             if (args[0].startsWith("note=")) {
-                return Message.SET_NOTE_SUGGESTIONS;
+                return CommandUtil.getMatched(Message.SET_NOTE_SUGGESTIONS, args[0]);
             }
             if (args[0].startsWith("instrument=")) {
-                return Message.SET_INSTRUMENT_SUGGESTIONS;
+                return CommandUtil.getMatched(Message.SET_INSTRUMENT_SUGGESTIONS, args[0]);
             }
             return List.of("note=", "instrument=");
         }
         if (args.length == 2) {
             if (args[0].startsWith("note=")) {
                 if (args[1].startsWith("instrument=")) {
-                    return Message.SET_INSTRUMENT_SUGGESTIONS;
+                    return CommandUtil.getMatched(Message.SET_NOTE_SUGGESTIONS, args[1]);
                 }
                 return Collections.singletonList("instrument=");
             }
             if (args[0].startsWith("instrument=")) {
                 if (args[1].startsWith("note=")) {
-                    return Message.SET_NOTE_SUGGESTIONS;
+                    return CommandUtil.getMatched(Message.SET_INSTRUMENT_SUGGESTIONS, args[1]);
                 }
                 return Collections.singletonList("note=");
             }
