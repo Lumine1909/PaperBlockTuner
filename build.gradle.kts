@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.lumine1909"
-version = "1.2.5"
+version = "1.2.6"
 description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
