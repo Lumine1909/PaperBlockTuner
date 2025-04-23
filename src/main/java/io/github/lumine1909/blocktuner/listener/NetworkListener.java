@@ -15,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.NoSuchElementException;
+
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
 public class NetworkListener implements Listener {
@@ -48,7 +50,10 @@ public class NetworkListener implements Listener {
 
     public static void unregisterChannel(Player player) {
         ServerPlayer sp = ((CraftPlayer) player).getHandle();
-        sp.connection.connection.channel.pipeline().remove("blocktuner_handler");
+        try {
+            sp.connection.connection.channel.pipeline().remove("blocktuner_handler");
+        } catch (NoSuchElementException ignored) {
+        }
     }
 
     @EventHandler

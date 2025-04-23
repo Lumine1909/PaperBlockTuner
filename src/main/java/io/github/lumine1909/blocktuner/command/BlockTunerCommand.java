@@ -21,7 +21,7 @@ public class BlockTunerCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (!(sender instanceof Player player) || !player.hasPermission("blocktuner.command.base")) {
+        if (!sender.hasPermission("blocktuner.command.base")) {
             sender.sendMessage(Message.translatable("error.no-permission"));
             return true;
         }
@@ -31,15 +31,15 @@ public class BlockTunerCommand implements TabExecutor {
         }
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
-                if (!player.hasPermission("blocktuner.admin")) {
+                if (!sender.hasPermission("blocktuner.admin")) {
                     sender.sendMessage(Message.translatable("error.no-perm"));
                     return true;
                 }
                 plugin.callReload();
-                player.sendMessage(Message.translatable("notice.plugin-reloaded"));
+                sender.sendMessage(Message.translatable("notice.plugin-reloaded"));
             }
             if (args[0].equalsIgnoreCase("settings")) {
-                if (!player.hasPermission("blocktuner.command.settings")) {
+                if (!(sender instanceof Player player) || !player.hasPermission("blocktuner.command.settings")) {
                     sender.sendMessage(Message.translatable("error.no-perm"));
                     return true;
                 }

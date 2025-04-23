@@ -2,9 +2,9 @@ name: $name
 version: $version
 main: io.github.lumine1909.blocktuner.BlockTunerPlugin
 libraries:
-  - org.reflections:reflections:0.10.2
   - org.xerial:sqlite-jdbc:3.49.1.0
 api-version: $apiVersion
+folia-supported: true
 description: $description
 authors:
   - Lumine1909

@@ -1,0 +1,3 @@
+# zh_CN or en_US for general language setting
+# translation.yml will be enabled if built-in language is 'none' or others
+built-in-language: 'zh_CN'

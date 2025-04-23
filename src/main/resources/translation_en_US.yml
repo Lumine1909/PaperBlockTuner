@@ -1,0 +1,65 @@
+gui-name:
+  note: '<dark_green><bold>Modify Note</bold></dark_green>'
+  instrument: '<dark_green><bold>Modify Instrument</bold></dark_green>'
+  settings: '<dark_green><bold>Settings</bold></dark_green>'
+
+error:
+  no-permission: '<red>Error: You do not have permission</red>'
+  invalid-command: '<red>Error: Invalid command usage</red>'
+  invalid-note: '<red>Error: Invalid note</red>'
+  invalid-instrument: '<red>Error: Invalid instrument</red>'
+  invalid-noteblock-pos: '<red>Error: Cannot sync position outside the world</red>'
+  not-facing-noteblock: '<red>Error: You are not facing a note block</red>'
+  not-holding-noteblock: '<red>Error: You are not holding a note block</red>'
+
+settings:
+  note: '<dark_aqua>Enable tuning stick to set note (right-click)</dark_aqua>'
+  instrument: '<dark_aqua>Enable tuning stick to set instrument (left-click)</dark_aqua>'
+  sync-instrument: '<dark_aqua>Sync block (also change the block beneath it when changing instrument)</dark_aqua>'
+  scroll-item: '<dark_aqua>Enable mouse wheel to tune the held note block (activate by switching off-hand while holding a note block)</dark_aqua>'
+  scroll-block: '<dark_aqua>Enable mouse wheel to tune the targeted note block (activate by switching off-hand while holding the tuning stick)</dark_aqua>'
+  no-perm-name: '<red>You do not have permission to set this item</red>'
+  enabled: '<green>Enabled, click to disable</green>'
+  disabled: '<red>Disabled, click to enable</red>'
+
+notice:
+  plugin-reloaded: '<aqua>Plugin reloaded successfully</aqua>'
+  get-tunestick: '<aqua>You received a tuning stick</aqua>'
+  scroll-item-activate: '<green>Item scroll tuning mode enabled</green>'
+  scroll-item-deactivate: '<red>Item scroll tuning mode disabled</red>'
+  scroll-block-activate: '<green>Block scroll tuning mode enabled</green>'
+  scroll-block-deactivate: '<red>Block scroll tuning mode disabled</red>'
+
+item:
+  noteblock-name: '<aqua>%s (%s)</aqua>'
+  tunestick-name: '<aqua>PaperBlockTuner Tuning Stick</aqua>'
+  tunestick-lore: '<green>Hold in hand and click on a note block to tune</green>'
+
+display:
+  info-pattern: '<aqua>%s (%s)</aqua>'
+
+instrument:
+  harp: '<aqua>Harp</aqua>'
+  bass: '<aqua>Bass</aqua>'
+  snare: '<aqua>Snare Drum</aqua>'
+  hat: '<aqua>Hi-Hat</aqua>'
+  basedrum: '<aqua>Bass Drum</aqua>'
+  bell: '<aqua>Bell</aqua>'
+  flute: '<aqua>Flute</aqua>'
+  chime: '<aqua>Chime</aqua>'
+  guitar: '<aqua>Guitar</aqua>'
+  xylophone: '<aqua>Xylophone</aqua>'
+  iron_xylophone: '<aqua>Iron Xylophone</aqua>'
+  cow_bell: '<aqua>Cow Bell</aqua>'
+  didgeridoo: '<aqua>Didgeridoo</aqua>'
+  bit: '<aqua>Bit</aqua>'
+  banjo: '<aqua>Banjo</aqua>'
+  pling: '<aqua>Pling</aqua>'
+  zombie: '<aqua>Zombie</aqua>'
+  skeleton: '<aqua>Skeleton</aqua>'
+  creeper: '<aqua>Creeper</aqua>'
+  dragon: '<aqua>Ender Dragon</aqua>'
+  wither_skeleton: '<aqua>Wither Skeleton</aqua>'
+  piglin: '<aqua>Piglin</aqua>'
+  default: '<aqua>Default (determined by the block below)</aqua>'
+  empty: '<aqua>Note Block</aqua>'

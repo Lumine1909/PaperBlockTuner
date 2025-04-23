@@ -17,13 +17,10 @@ repositories {
 
 dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
-    implementation(platform("com.intellectualsites.bom:bom-newest:1.52"))
-    compileOnly("com.intellectualsites.plotsquared:plotsquared-core")
-    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")
-    compileOnly("org.reflections:reflections:0.10.2")
+    compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.5.2")
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.13.0")
     compileOnly("org.xerial:sqlite-jdbc:3.49.1.0")
 }
-
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
