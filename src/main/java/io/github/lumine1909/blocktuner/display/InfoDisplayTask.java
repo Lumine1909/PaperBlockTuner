@@ -90,5 +90,12 @@ public class InfoDisplayTask extends BukkitRunnable {
             if (!Objects.equals(noteBlock, cache.noteBlock)) return false;
             return Objects.equals(block, cache.block);
         }
+
+        @Override
+        public int hashCode() {
+            int result = noteBlock != null ? noteBlock.hashCode() : 0;
+            result = 31 * result + (block != null ? block.hashCode() : 0);
+            return result;
+        }
     }
 }

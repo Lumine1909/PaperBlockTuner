@@ -33,11 +33,11 @@ public class TuneHandCommand implements TabExecutor {
         }
         ItemStack itemStack;
         if ((itemStack = player.getInventory().getItemInMainHand()).isEmpty()) {
-            sender.sendMessage(Message.translatable("error.not-handing-noteblock"));
+            sender.sendMessage(Message.translatable("error.not-holding-noteblock"));
             return true;
         }
         if (itemStack.getType() != Material.NOTE_BLOCK) {
-            sender.sendMessage(Message.translatable("error.not-handing-noteblock"));
+            sender.sendMessage(Message.translatable("error.not-holding-noteblock"));
             return true;
         }
         NoteBlock noteBlock = (NoteBlock) ((BlockDataMeta) itemStack.getItemMeta()).getBlockData(Material.NOTE_BLOCK);
@@ -60,13 +60,13 @@ public class TuneHandCommand implements TabExecutor {
         if (args.length == 2) {
             if (args[0].startsWith("note=")) {
                 if (args[1].startsWith("instrument=")) {
-                    return CommandUtil.getMatched(Message.SET_NOTE_SUGGESTIONS, args[1]);
+                    return CommandUtil.getMatched(Message.SET_INSTRUMENT_SUGGESTIONS, args[1]);
                 }
                 return Collections.singletonList("instrument=");
             }
             if (args[0].startsWith("instrument=")) {
                 if (args[1].startsWith("note=")) {
-                    return CommandUtil.getMatched(Message.SET_INSTRUMENT_SUGGESTIONS, args[1]);
+                    return CommandUtil.getMatched(Message.SET_NOTE_SUGGESTIONS, args[1]);
                 }
                 return Collections.singletonList("note=");
             }

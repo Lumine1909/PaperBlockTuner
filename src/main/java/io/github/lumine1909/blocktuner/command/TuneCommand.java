@@ -56,13 +56,13 @@ public class TuneCommand implements TabExecutor {
         if (args.length == 2) {
             if (args[0].startsWith("note=")) {
                 if (args[1].startsWith("instrument=")) {
-                    return CommandUtil.getMatched(Message.SET_NOTE_SUGGESTIONS, args[1]);
+                    return CommandUtil.getMatched(Message.SET_INSTRUMENT_SUGGESTIONS, args[1]);
                 }
                 return Collections.singletonList("instrument=");
             }
             if (args[0].startsWith("instrument=")) {
                 if (args[1].startsWith("note=")) {
-                    return CommandUtil.getMatched(Message.SET_INSTRUMENT_SUGGESTIONS, args[1]);
+                    return CommandUtil.getMatched(Message.SET_NOTE_SUGGESTIONS, args[1]);
                 }
                 return Collections.singletonList("note=");
             }

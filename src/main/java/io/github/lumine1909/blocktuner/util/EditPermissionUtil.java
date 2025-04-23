@@ -17,7 +17,8 @@ public class EditPermissionUtil {
                 com.plotsquared.core.location.Location.at(
                     location.getWorld().getName(),
                     location.getBlockX(), location.getBlockY(), location.getBlockZ()
-                ));
+                )
+            );
             if (plot != null) {
                 return plot.getMembers().contains(player.getUniqueId()) ||
                     plot.getOwners().contains(player.getUniqueId()) ||

@@ -9,10 +9,10 @@ import io.github.lumine1909.blocktuner.listener.*;
 import io.github.lumine1909.blocktuner.metrics.Metrics;
 import io.github.lumine1909.blocktuner.util.Message;
 import io.github.lumine1909.blocktuner.util.StorageUtil;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 
@@ -21,7 +21,7 @@ import static io.github.lumine1909.blocktuner.command.core.CommandHandler.regist
 public class BlockTunerPlugin extends JavaPlugin {
 
     public static BlockTunerPlugin plugin;
-    public static BukkitTask displayTask;
+    public static ScheduledTask displayTask;
     public static String DATABASE_PATH;
 
     @Override
@@ -36,7 +36,8 @@ public class BlockTunerPlugin extends JavaPlugin {
             NetworkListener.registerChannel(player);
             PlayerData.of(player);
         }
-        displayTask = new InfoDisplayTask().runTaskTimer(this, 0, 2);
+        displayTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, (task) -> new InfoDisplayTask().run(), 1, 2);
+        //displayTask = new InfoDisplayTask().runTaskTimer(this, 0, 2);
         new Metrics(this, 25453);
     }
 
