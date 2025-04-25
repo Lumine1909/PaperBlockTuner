@@ -21,36 +21,7 @@ import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
 public class Message {
 
-    enum Language {
-        CHINESE("zh_CN"),
-        ENGLISH("en_US"),
-        NONE("");
-
-        public static final Map<String, Language> NAME_LOOKUP = new HashMap<>();
-
-        private final String name;
-
-        Language(String name) {
-            this.name = name;
-        }
-
-        static {
-            for (Language language : Language.values()) {
-                NAME_LOOKUP.put(language.name, language);
-            }
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static Language getLanguage(String name) {
-            return NAME_LOOKUP.getOrDefault(name, NONE);
-        }
-    }
-
     private static final Map<String, String> TRANSLATIONS = new HashMap<>();
-
     public static List<String> SET_NOTE_SUGGESTIONS;
     public static List<String> SET_INSTRUMENT_SUGGESTIONS;
 
@@ -133,5 +104,33 @@ public class Message {
     public static Component translatable(String key, Object... args) {
         String translated = translate(key).formatted(args);
         return MiniMessage.miniMessage().deserialize(translated).decoration(TextDecoration.ITALIC, false);
+    }
+
+    enum Language {
+        CHINESE("zh_CN"),
+        ENGLISH("en_US"),
+        NONE("");
+
+        public static final Map<String, Language> NAME_LOOKUP = new HashMap<>();
+
+        static {
+            for (Language language : Language.values()) {
+                NAME_LOOKUP.put(language.name, language);
+            }
+        }
+
+        private final String name;
+
+        Language(String name) {
+            this.name = name;
+        }
+
+        public static Language getLanguage(String name) {
+            return NAME_LOOKUP.getOrDefault(name, NONE);
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }
