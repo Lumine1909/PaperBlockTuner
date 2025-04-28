@@ -3,7 +3,6 @@ package io.github.lumine1909.blocktuner.listener;
 import io.github.lumine1909.blocktuner.network.BlockTunerProtocol;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ServerboundPickItemFromBlockPacket;
@@ -39,11 +38,6 @@ public class NetworkListener implements Listener {
                     return;
                 }
                 super.channelRead(ctx, msg);
-            }
-
-            @Override
-            public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-                super.write(ctx, msg, promise);
             }
         });
     }

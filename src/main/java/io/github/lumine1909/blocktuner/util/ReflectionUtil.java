@@ -4,11 +4,12 @@ import java.lang.reflect.Field;
 
 public class ReflectionUtil {
 
-    public static Object accessField(Class<?> clazz, String fieldName, Object instance) {
+    @SuppressWarnings("unchecked")
+    public static <T> T accessField(Class<?> clazz, String fieldName, Object instance) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
-            return field.get(instance);
+            return (T) field.get(instance);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

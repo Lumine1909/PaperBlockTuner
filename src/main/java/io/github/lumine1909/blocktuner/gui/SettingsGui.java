@@ -21,8 +21,7 @@ public class SettingsGui implements EditingGui {
 
     private static final Pair<Function<PlayerData, ItemStack>, Consumer<PlayerData>> NONE = Pair.of(
         data -> new ItemStack(Material.AIR),
-        data -> {
-        }
+        data -> {}
     );
 
     private static List<Pair<Function<PlayerData, ItemStack>, Consumer<PlayerData>>> settings;
@@ -116,13 +115,12 @@ public class SettingsGui implements EditingGui {
     @Override
     public void onClick(InventoryClickEvent event) {
         int slot = event.getRawSlot();
-        if (slot < 0 || slot >= inventory.getSize()) return;
-
+        if (slot < 0 || slot >= inventory.getSize()) {
+            return;
+        }
         event.setCancelled(true);
-
         Player player = (Player) event.getWhoClicked();
         PlayerData data = PlayerData.of(player);
-
         if (slot < settings.size()) {
             Pair<Function<PlayerData, ItemStack>, Consumer<PlayerData>> pair = settings.get(slot);
             pair.second().accept(data);
