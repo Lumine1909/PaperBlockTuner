@@ -21,7 +21,8 @@ public class SettingsGui implements EditingGui {
 
     private static final Pair<Function<PlayerData, ItemStack>, Consumer<PlayerData>> NONE = Pair.of(
         data -> new ItemStack(Material.AIR),
-        data -> {}
+        data -> {
+        }
     );
 
     private static List<Pair<Function<PlayerData, ItemStack>, Consumer<PlayerData>>> settings;
