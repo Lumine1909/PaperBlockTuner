@@ -21,7 +21,6 @@ public class ScrollTuningListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-
     @EventHandler
     public void onItemSwap(PlayerSwapHandItemsEvent event) {
         PlayerData data = PlayerData.of(event.getPlayer());
@@ -64,7 +63,7 @@ public class ScrollTuningListener implements Listener {
         event.setCancelled(true);
     }
 
-    private int calcDiff(int prev, int next) {
+    private static int calcDiff(int prev, int next) {
         if (prev - next > 4) {
             return prev - next - 9;
         }
