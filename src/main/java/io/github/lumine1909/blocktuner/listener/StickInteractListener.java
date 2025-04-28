@@ -19,7 +19,7 @@ public class StickInteractListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (!TuneStickUtil.isTuneStick(player.getInventory().getItemInMainHand()) && !TuneStickUtil.isTuneStick(player.getInventory().getItemInOffHand())) {

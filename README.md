@@ -1,5 +1,5 @@
 
-<img src="https://github.com/user-attachments/assets/5060e51a-3496-45a7-a343-91ce92f5b4b4" alt="PaperBlockTuner" width="128" height="128" style="vertical-align: middle; margin-right: 2px;" />
+<img src="/assets/PaperBlockTuner.png" alt="PaperBlockTuner" width="128" height="128" style="vertical-align: middle; margin-right: 2px;" />
 
 
 # PaperBlockTuner
@@ -12,7 +12,7 @@
 - Change instruments via GUI
 - Scroll-tuning support for blocks and items
 - Configurable settings per-player
-- Support [BlockTuner](https://github.com/Lumine1909/BlockTunerMod_Continue) mod
+- Support [BlockTuner Mod](https://github.com/Lumine1909/BlockTunerMod_Continue)
 
 ## Getting Started
 
