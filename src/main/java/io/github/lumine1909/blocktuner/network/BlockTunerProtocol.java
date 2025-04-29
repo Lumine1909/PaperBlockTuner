@@ -1,6 +1,7 @@
 package io.github.lumine1909.blocktuner.network;
 
 import io.github.lumine1909.blocktuner.data.NoteBlockData;
+import io.github.lumine1909.blocktuner.network.misc.PacketContext;
 import io.github.lumine1909.blocktuner.object.Instrument;
 import io.github.lumine1909.blocktuner.util.InstrumentUtil;
 import io.github.lumine1909.blocktuner.util.NoteUtil;
@@ -30,6 +31,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
@@ -46,18 +50,19 @@ public class BlockTunerProtocol {
         return ResourceLocation.tryBuild(MOD_ID, path);
     }
 
-    public static boolean handleModPacket(CustomPacketPayload customPacketPayload, ServerPlayer player) {
-        if (!(customPacketPayload instanceof DiscardedPayload(ResourceLocation id, byte[] data))) {
+    public static boolean handleModPacket(CustomPacketPayload customPacketPayload, PacketContext context) {
+        if (!(customPacketPayload instanceof DiscardedPayload(ResourceLocation id, byte[] data)) || !id.getNamespace().equals("blocktuner")) {
             return false;
         }
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.wrappedBuffer(data), MinecraftServer.getServer().registryAccess());
         if (id.equals(SERVER_BOUND_HELLO)) {
             int protocolVersion = buf.readInt();
             if (protocolVersion == TUNING_PROTOCOL) {
-                player.connection.send(new ClientboundCustomPayloadPacket(new DiscardedPayload(CLIENT_BOUND_HELLO, buf.array())));
+                context.send(new ClientboundCustomPayloadPacket(new DiscardedPayload(CLIENT_BOUND_HELLO, buf.array())));
             }
             return true;
         } else if (id.equals(SERVER_BOUND_TUNING)) {
+            ServerPlayer player = context.player().orElseThrow();
             BlockPos pos = buf.readBlockPos();
             int note = buf.readInt();
             Level world = player.level();
@@ -70,10 +75,11 @@ public class BlockTunerProtocol {
         return false;
     }
 
-    public static boolean handlePickItemPacket(ServerboundPickItemFromBlockPacket packet, ServerPlayer player) {
+    public static boolean handlePickItemPacket(ServerboundPickItemFromBlockPacket packet, PacketContext context) {
         if (!packet.includeData()) {
             return false;
         }
+        ServerPlayer player = context.player().orElseThrow();
         ServerLevel serverLevel = player.serverLevel();
         BlockPos blockPos = packet.pos();
         if (!player.canInteractWithBlock(blockPos, 1.0F) || !serverLevel.isLoaded(blockPos)) {
