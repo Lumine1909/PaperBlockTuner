@@ -7,6 +7,7 @@ import io.github.lumine1909.blocktuner.gui.NoteTuneGui;
 import io.github.lumine1909.blocktuner.gui.SettingsGui;
 import io.github.lumine1909.blocktuner.listener.*;
 import io.github.lumine1909.blocktuner.metrics.Metrics;
+import io.github.lumine1909.blocktuner.network.NetworkListener;
 import io.github.lumine1909.blocktuner.util.Message;
 import io.github.lumine1909.blocktuner.util.StorageUtil;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
@@ -30,6 +31,7 @@ public class BlockTunerPlugin extends JavaPlugin {
         DATABASE_PATH = new File(getDataFolder(), "playerdata.db").getAbsolutePath();
         callReload();
         StorageUtil.initDatabase();
+        NetworkListener.registerListener();
         registerEvents();
         registerCommands();
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -47,6 +49,7 @@ public class BlockTunerPlugin extends JavaPlugin {
             NetworkListener.unregisterChannel(player);
             StorageUtil.save(PlayerData.of(player));
         }
+        NetworkListener.unregisterListener();
         if (displayTask != null) {
             displayTask.cancel();
         }
@@ -60,7 +63,6 @@ public class BlockTunerPlugin extends JavaPlugin {
     }
 
     private void registerEvents() {
-        new NetworkListener();
         new NotePlayListener();
         new DisplayTaskListener();
         new DataHandleListener();
