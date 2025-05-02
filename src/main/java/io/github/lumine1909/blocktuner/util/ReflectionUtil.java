@@ -1,14 +1,24 @@
 package io.github.lumine1909.blocktuner.util;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 import java.lang.reflect.Field;
 
 public class ReflectionUtil {
 
+    private static final Cache<String, Field> FIELD_CACHE = CacheBuilder.newBuilder().build();
+
     @SuppressWarnings("unchecked")
     public static <T> T accessField(Class<?> clazz, String fieldName, Object instance) {
         try {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
+            String cacheKey = clazz.getName() + "." + fieldName;
+            Field field;
+            if ((field = FIELD_CACHE.getIfPresent(cacheKey)) == null) {
+                field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                FIELD_CACHE.put(cacheKey, field);
+            }
             return (T) field.get(instance);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -17,8 +27,13 @@ public class ReflectionUtil {
 
     public static void modifyField(Class<?> clazz, String fieldName, Object instance, Object value) {
         try {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
+            String cacheKey = clazz.getName() + "." + fieldName;
+            Field field;
+            if ((field = FIELD_CACHE.getIfPresent(cacheKey)) == null) {
+                field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                FIELD_CACHE.put(cacheKey, field);
+            }
             field.set(instance, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
