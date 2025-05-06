@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.lumine1909"
-version = "1.3.0"
+version = "1.4.0"
 description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    implementation("io.github.lumine1909:messageutil:1.0.1")
     compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.5.2")
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.13.0")
     compileOnly("org.xerial:sqlite-jdbc:3.49.1.0")
