@@ -5,12 +5,11 @@ plugins {
 }
 
 group = "io.github.lumine1909"
-version = "1.3.0"
+version = "1.4.0"
 description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
     mavenCentral()
-    mavenLocal()
     gradlePluginPortal()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://maven.enginehub.org/repo/")

@@ -1,15 +1,18 @@
 package io.github.lumine1909.blocktuner.network;
 
 import io.github.lumine1909.blocktuner.data.NoteBlockData;
-import io.github.lumine1909.blocktuner.network.misc.PacketContext;
 import io.github.lumine1909.blocktuner.object.Instrument;
 import io.github.lumine1909.blocktuner.util.InstrumentUtil;
 import io.github.lumine1909.blocktuner.util.NoteUtil;
 import io.github.lumine1909.blocktuner.util.TuneUtil;
+import io.github.lumine1909.messageutil.api.MessageReceiver;
+import io.github.lumine1909.messageutil.object.PacketContext;
+import io.github.lumine1909.messageutil.object.PacketEvent;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -37,62 +40,61 @@ import java.util.UUID;
 
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
-public class BlockTunerProtocol {
+public class BlockTunerProtocol extends MessageReceiver {
 
     public static final String MOD_ID = "blocktuner";
     private static final int TUNING_PROTOCOL = 3;
 
-    private static final ResourceLocation CLIENT_BOUND_HELLO = id("client_bound_hello");
-    private static final ResourceLocation SERVER_BOUND_HELLO = id("server_bound_hello");
-    private static final ResourceLocation SERVER_BOUND_TUNING = id("server_bound_tuning");
+    public static final String CLIENT_BOUND_HELLO = "blocktuner:client_bound_hello";
+    public static final String SERVER_BOUND_HELLO = "blocktuner:server_bound_hello";
+    public static final String SERVER_BOUND_TUNING = "blocktuner:server_bound_tuning";
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.tryBuild(MOD_ID, path);
+    @Override
+    public boolean isActive() {
+        return plugin.isEnabled();
     }
 
-    public static boolean handleModPacket(CustomPacketPayload customPacketPayload, PacketContext context) {
-        if (!(customPacketPayload instanceof DiscardedPayload(ResourceLocation id, byte[] data)) || !id.getNamespace().equals("blocktuner")) {
-            return false;
+    @MessageReceiver.Bytebuf(key = SERVER_BOUND_HELLO)
+    public void handleHello(PacketContext context, PacketEvent event, FriendlyByteBuf buf) {
+        int protocolVersion = buf.readInt();
+        if (protocolVersion == TUNING_PROTOCOL) {
+            event.setCancelled(true);
+            context.send(CLIENT_BOUND_HELLO, buf);
         }
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.wrappedBuffer(data), MinecraftServer.getServer().registryAccess());
-        if (id.equals(SERVER_BOUND_HELLO)) {
-            int protocolVersion = buf.readInt();
-            if (protocolVersion == TUNING_PROTOCOL) {
-                context.send(new ClientboundCustomPayloadPacket(new DiscardedPayload(CLIENT_BOUND_HELLO, buf.array())));
-            }
-            return true;
-        } else if (id.equals(SERVER_BOUND_TUNING)) {
-            ServerPlayer player = context.player().orElseThrow();
-            BlockPos pos = buf.readBlockPos();
-            int note = buf.readInt();
-            Level world = player.level();
-            if (world.getBlockState(pos).getBlock() != Blocks.NOTE_BLOCK) {
-                return true;
-            }
+    }
+
+    @MessageReceiver.Bytebuf(key = SERVER_BOUND_TUNING)
+    public void handleTuning(PacketContext context, PacketEvent event, FriendlyByteBuf buf) {
+        event.setCancelled(true);
+        ServerPlayer player = context.player().orElseThrow();
+        BlockPos pos = buf.readBlockPos();
+        int note = buf.readInt();
+        Level world = player.level();
+        if (world.getBlockState(pos).getBlock() == Blocks.NOTE_BLOCK) {
             Bukkit.getScheduler().runTask(plugin, () -> TuneUtil.tune(player, (ServerLevel) world, pos, NoteUtil.byNote(note), Instrument.DEFAULT));
-            return true;
         }
-        return false;
     }
 
-    public static boolean handlePickItemPacket(ServerboundPickItemFromBlockPacket packet, PacketContext context) {
+    @MessageReceiver.Vanilla(packetType = ServerboundPickItemFromBlockPacket.class)
+    public void handlePickItem(PacketContext context, PacketEvent event, ServerboundPickItemFromBlockPacket packet) {
         if (!packet.includeData()) {
-            return false;
+            return;
         }
         ServerPlayer player = context.player().orElseThrow();
         ServerLevel serverLevel = player.serverLevel();
         BlockPos blockPos = packet.pos();
         if (!player.canInteractWithBlock(blockPos, 1.0F) || !serverLevel.isLoaded(blockPos)) {
-            return true;
+            return;
         }
         BlockState blockState = serverLevel.getBlockState(blockPos);
         if (!(blockState.getBlock() instanceof NoteBlock)) {
-            return false;
+            return;
         }
         boolean flag = player.hasInfiniteMaterials() && packet.includeData();
         ItemStack cloneItemStack = blockState.getCloneItemStack(serverLevel, blockPos, flag);
+        event.setCancelled(true);
         if (cloneItemStack.isEmpty()) {
-            return true;
+            return;
         }
         if (flag && player.getBukkitEntity().hasPermission("minecraft.nbt.copy")) {
             addBlockDataToItem(blockState, serverLevel, blockPos, cloneItemStack);
@@ -109,7 +111,6 @@ public class BlockTunerProtocol {
             toPick = cloneItemStack;
         }
         Bukkit.getScheduler().runTask(plugin, () -> tryPickItem(toPick, player));
-        return true;
     }
 
     private static void addBlockDataToItem(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack) {
