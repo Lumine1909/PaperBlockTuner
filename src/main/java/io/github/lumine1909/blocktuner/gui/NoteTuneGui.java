@@ -32,7 +32,7 @@ public class NoteTuneGui implements EditingGui {
     @Override
     public void onClick(InventoryClickEvent event) {
         int slot = event.getRawSlot();
-        if (slot < 0 || slot >= 24) {
+        if (slot < 0 || slot > 24) {
             return;
         }
         event.setCancelled(true);
