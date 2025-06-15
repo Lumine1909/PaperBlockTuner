@@ -40,10 +40,12 @@ public class ScrollTuningListener implements Listener {
 
     @EventHandler
     public void onScrollItem(PlayerItemHeldEvent event) {
-        if (!PlayerData.of(event.getPlayer()).isItemScrollTuning || event.getPlayer().getInventory().getItem(event.getPreviousSlot()).getType() != Material.NOTE_BLOCK) {
+        ItemStack noteBlock = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
+        if (!PlayerData.of(event.getPlayer()).isItemScrollTuning ||
+            noteBlock == null ||
+            noteBlock.getType() != Material.NOTE_BLOCK) {
             return;
         }
-        ItemStack noteBlock = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
         int next = Math.floorMod(ItemUtil.getNote(noteBlock).getNote() + calcDiff(event.getPreviousSlot(), event.getNewSlot()), 25);
         event.getPlayer().getInventory().setItemInMainHand(ItemUtil.setNote(noteBlock, NoteUtil.byNote(next)));
         event.setCancelled(true);
