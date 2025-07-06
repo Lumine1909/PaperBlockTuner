@@ -10,7 +10,7 @@ public class ReflectionUtil {
     private static final Cache<String, Field> FIELD_CACHE = CacheBuilder.newBuilder().build();
 
     @SuppressWarnings("unchecked")
-    public static <T> T accessField(Class<?> clazz, String fieldName, Object instance) {
+    public static <T> T get(Class<?> clazz, String fieldName, Object instance) {
         try {
             String cacheKey = clazz.getName() + "." + fieldName;
             Field field;
@@ -25,7 +25,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static void modifyField(Class<?> clazz, String fieldName, Object instance, Object value) {
+    public static void set(Class<?> clazz, String fieldName, Object instance, Object value) {
         try {
             String cacheKey = clazz.getName() + "." + fieldName;
             Field field;

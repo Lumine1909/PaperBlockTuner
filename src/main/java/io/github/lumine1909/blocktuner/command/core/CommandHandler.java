@@ -19,13 +19,13 @@ import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
 public class CommandHandler {
 
-    private static final Constructor<PluginCommand> CONSTRUCTOR_PluginCommand;
+    private static final Constructor<PluginCommand> constructor$PluginCommand;
     private static final CommandMap COMMAND_MAP = Bukkit.getCommandMap();
 
     static {
         try {
-            CONSTRUCTOR_PluginCommand = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
-            CONSTRUCTOR_PluginCommand.setAccessible(true);
+            constructor$PluginCommand = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            constructor$PluginCommand.setAccessible(true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -68,7 +68,7 @@ public class CommandHandler {
 
     private static PluginCommand createCommand(String name) {
         try {
-            return CONSTRUCTOR_PluginCommand.newInstance(name, plugin);
+            return constructor$PluginCommand.newInstance(name, plugin);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

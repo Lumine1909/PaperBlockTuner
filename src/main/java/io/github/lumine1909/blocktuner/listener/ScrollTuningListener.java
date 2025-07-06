@@ -21,6 +21,16 @@ public class ScrollTuningListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    private static int calcDiff(int prev, int next) {
+        if (prev - next > 4) {
+            return prev - next - 9;
+        }
+        if (next - prev > 4) {
+            return prev - next + 9;
+        }
+        return prev - next;
+    }
+
     @EventHandler
     public void onItemSwap(PlayerSwapHandItemsEvent event) {
         PlayerData data = PlayerData.of(event.getPlayer());
@@ -63,15 +73,5 @@ public class ScrollTuningListener implements Listener {
         int next = Math.floorMod(noteBlock.getNote().getId() + calcDiff(event.getPreviousSlot(), event.getNewSlot()), 25);
         TuneUtil.tune(event.getPlayer(), block, NoteUtil.byNote(next), Instrument.EMPTY);
         event.setCancelled(true);
-    }
-
-    private static int calcDiff(int prev, int next) {
-        if (prev - next > 4) {
-            return prev - next - 9;
-        }
-        if (next - prev > 4) {
-            return prev - next + 9;
-        }
-        return prev - next;
     }
 }

@@ -8,19 +8,11 @@ import io.github.lumine1909.blocktuner.util.TuneUtil;
 import io.github.lumine1909.messageutil.api.MessageReceiver;
 import io.github.lumine1909.messageutil.object.PacketContext;
 import io.github.lumine1909.messageutil.object.PacketEvent;
-import io.netty.buffer.Unpooled;
-import io.papermc.paper.configuration.GlobalConfiguration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.network.protocol.common.custom.DiscardedPayload;
 import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ServerboundPickItemFromBlockPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,20 +26,47 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
+import static io.github.lumine1909.blocktuner.util.ReflectionUtil.set;
 
 public class BlockTunerProtocol extends MessageReceiver {
 
     public static final String MOD_ID = "blocktuner";
-    private static final int TUNING_PROTOCOL = 3;
-
     public static final String CLIENT_BOUND_HELLO = "blocktuner:client_bound_hello";
     public static final String SERVER_BOUND_HELLO = "blocktuner:server_bound_hello";
     public static final String SERVER_BOUND_TUNING = "blocktuner:server_bound_tuning";
+    private static final int TUNING_PROTOCOL = 3;
+
+    private static void addBlockDataToItem(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack) {
+        BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
+        if (blockEntity != null) {
+            CompoundTag compoundTag = blockEntity.saveCustomOnly(level.registryAccess());
+            blockEntity.removeComponentsFromTag(compoundTag);
+            BlockItem.setBlockEntityData(stack, blockEntity.getType(), compoundTag);
+            stack.applyComponents(blockEntity.collectComponents());
+        }
+    }
+
+    private static void tryPickItem(ItemStack stack, ServerPlayer player) {
+        if (!stack.isItemEnabled(player.level().enabledFeatures())) {
+            return;
+        }
+        Inventory inventory = player.getInventory();
+        int sourceSlot = inventory.findSlotMatchingItem(stack);
+        int targetSlot = Inventory.isHotbarSlot(sourceSlot) ? sourceSlot : inventory.getSuitableHotbarSlot();
+        if (sourceSlot != -1) {
+            if (Inventory.isHotbarSlot(sourceSlot) && Inventory.isHotbarSlot(targetSlot)) {
+                set(inventory.getClass(), "selected", inventory, targetSlot);
+            } else {
+                inventory.pickSlot(sourceSlot, targetSlot);
+            }
+        } else if (player.hasInfiniteMaterials()) {
+            inventory.addAndPickItem(stack, targetSlot);
+        }
+        player.connection.send(new ClientboundSetHeldSlotPacket(targetSlot));
+        player.inventoryMenu.broadcastChanges();
+    }
 
     @Override
     public boolean isActive() {
@@ -81,7 +100,7 @@ public class BlockTunerProtocol extends MessageReceiver {
             return;
         }
         ServerPlayer player = context.player().orElseThrow();
-        ServerLevel serverLevel = player.serverLevel();
+        ServerLevel serverLevel = (ServerLevel) player.level();
         BlockPos blockPos = packet.pos();
         if (!player.canInteractWithBlock(blockPos, 1.0F) || !serverLevel.isLoaded(blockPos)) {
             return;
@@ -111,38 +130,5 @@ public class BlockTunerProtocol extends MessageReceiver {
             toPick = cloneItemStack;
         }
         Bukkit.getScheduler().runTask(plugin, () -> tryPickItem(toPick, player));
-    }
-
-    private static void addBlockDataToItem(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack) {
-        BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
-        if (blockEntity != null) {
-            CompoundTag compoundTag = blockEntity.saveCustomOnly(level.registryAccess());
-            blockEntity.removeComponentsFromTag(compoundTag);
-            BlockItem.setBlockEntityData(stack, blockEntity.getType(), compoundTag);
-            stack.applyComponents(blockEntity.collectComponents());
-        }
-    }
-
-    private static void tryPickItem(ItemStack stack, ServerPlayer player) {
-        if (!stack.isItemEnabled(player.level().enabledFeatures())) {
-            return;
-        }
-        Inventory inventory = player.getInventory();
-        int sourceSlot = inventory.findSlotMatchingItem(stack);
-        int targetSlot = Inventory.isHotbarSlot(sourceSlot) ? sourceSlot : inventory.getSuitableHotbarSlot();
-        if (sourceSlot != -1) {
-            if (Inventory.isHotbarSlot(sourceSlot) && Inventory.isHotbarSlot(targetSlot)) {
-                inventory.selected = targetSlot;
-            } else {
-                inventory.pickSlot(sourceSlot, targetSlot);
-            }
-        } else if (player.hasInfiniteMaterials()) {
-            inventory.addAndPickItem(stack, targetSlot);
-        }
-        player.connection.send(new ClientboundSetHeldSlotPacket(inventory.selected));
-        player.inventoryMenu.broadcastChanges();
-        if (GlobalConfiguration.get().unsupportedSettings.updateEquipmentOnPlayerActions) {
-            player.detectEquipmentUpdatesPublic();
-        }
     }
 }

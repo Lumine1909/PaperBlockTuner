@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static io.github.lumine1909.blocktuner.util.ReflectionUtil.accessField;
+import static io.github.lumine1909.blocktuner.util.ReflectionUtil.get;
 
 public class FakeArmorStandDisplay {
 
@@ -35,10 +35,10 @@ public class FakeArmorStandDisplay {
             EntityType.ARMOR_STAND, 0, Vec3.ZERO, 0
         ));
         sp.connection.send(new ClientboundSetEntityDataPacket(ENTITY_ID, List.of(
-            SynchedEntityData.DataValue.create(accessField(Entity.class, "DATA_SHARED_FLAGS_ID", null), (byte) 32),
-            SynchedEntityData.DataValue.create(accessField(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name))),
-            SynchedEntityData.DataValue.create(accessField(Entity.class, "DATA_CUSTOM_NAME_VISIBLE", null), true),
-            SynchedEntityData.DataValue.create(accessField(Entity.class, "DATA_NO_GRAVITY", null), true),
+            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_SHARED_FLAGS_ID", null), (byte) 32),
+            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name))),
+            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_CUSTOM_NAME_VISIBLE", null), true),
+            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_NO_GRAVITY", null), true),
             SynchedEntityData.DataValue.create(ArmorStand.DATA_CLIENT_FLAGS, (byte) 21)
         )));
     }
@@ -46,7 +46,7 @@ public class FakeArmorStandDisplay {
     public static void updateArmor(Player player, Component name) {
         ServerPlayer sp = ((CraftPlayer) player).getHandle();
         sp.connection.send(new ClientboundSetEntityDataPacket(ENTITY_ID, List.of(
-            SynchedEntityData.DataValue.create(accessField(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name)))
+            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name)))
         )));
     }
 

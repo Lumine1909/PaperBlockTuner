@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.lumine1909"
-version = "1.4.1"
+version = "1.5.0"
 description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
@@ -32,7 +32,7 @@ tasks {
         dependsOn(shadowJar)
     }
     shadowJar {
-        archiveFileName.set("PaperBlockTuner-${version}-MC-1.21.4.jar")
+        archiveFileName.set("PaperBlockTuner-${version}-MC-1.21.4-1.21.7.jar")
         minimize()
     }
     withType<JavaCompile> {
