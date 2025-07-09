@@ -37,8 +37,8 @@ public class InfoDisplayTask extends BukkitRunnable {
     }
 
     private int getUpdateStatus(Player player) {
-        Block target = player.getTargetBlock(null, 5);
-        if (!(target.getBlockData() instanceof NoteBlock noteBlock)) {
+        Block target = player.getTargetBlockExact(5);
+        if (target == null || !(target.getBlockData() instanceof NoteBlock noteBlock)) {
             return 1;
         }
         ItemStack main = player.getInventory().getItemInMainHand();
