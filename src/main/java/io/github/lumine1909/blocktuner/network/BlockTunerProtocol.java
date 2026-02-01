@@ -15,6 +15,7 @@ import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ServerboundPickItemFromBlockPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.storage.TagValueOutput;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 
@@ -38,12 +40,14 @@ public class BlockTunerProtocol extends MessageReceiver {
     public static final String SERVER_BOUND_TUNING = "blocktuner:server_bound_tuning";
     private static final int TUNING_PROTOCOL = 3;
 
+    @SuppressWarnings("deprecation")
     private static void addBlockDataToItem(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack) {
         BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
         if (blockEntity != null) {
-            CompoundTag compoundTag = blockEntity.saveCustomOnly(level.registryAccess());
-            blockEntity.removeComponentsFromTag(compoundTag);
-            BlockItem.setBlockEntityData(stack, blockEntity.getType(), compoundTag);
+            TagValueOutput tagValueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+            blockEntity.saveCustomOnly(tagValueOutput);
+            blockEntity.removeComponentsFromTag(tagValueOutput);
+            BlockItem.setBlockEntityData(stack, blockEntity.getType(), tagValueOutput);
             stack.applyComponents(blockEntity.collectComponents());
         }
     }
@@ -85,7 +89,7 @@ public class BlockTunerProtocol extends MessageReceiver {
     @MessageReceiver.Bytebuf(key = SERVER_BOUND_TUNING)
     public void handleTuning(PacketContext context, PacketEvent event, FriendlyByteBuf buf) {
         event.setCancelled(true);
-        ServerPlayer player = context.player().orElseThrow();
+        ServerPlayer player = context.player();
         BlockPos pos = buf.readBlockPos();
         int note = buf.readInt();
         Level world = player.level();
@@ -99,17 +103,17 @@ public class BlockTunerProtocol extends MessageReceiver {
         if (!packet.includeData()) {
             return;
         }
-        ServerPlayer player = context.player().orElseThrow();
-        ServerLevel serverLevel = (ServerLevel) player.level();
+        ServerPlayer player = context.player();
+        ServerLevel serverLevel = player.level();
         BlockPos blockPos = packet.pos();
-        if (!player.canInteractWithBlock(blockPos, 1.0F) || !serverLevel.isLoaded(blockPos)) {
+        if (!player.isWithinBlockInteractionRange(blockPos, 1.0F) || !serverLevel.isLoaded(blockPos)) {
             return;
         }
         BlockState blockState = serverLevel.getBlockState(blockPos);
         if (!(blockState.getBlock() instanceof NoteBlock)) {
             return;
         }
-        boolean flag = player.hasInfiniteMaterials() && packet.includeData();
+        boolean flag = player.hasInfiniteMaterials();
         ItemStack cloneItemStack = blockState.getCloneItemStack(serverLevel, blockPos, flag);
         event.setCancelled(true);
         if (cloneItemStack.isEmpty()) {

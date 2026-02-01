@@ -26,7 +26,7 @@ public class FakeArmorStandDisplay {
     private static final int ENTITY_ID = 1145141919;
     private static final UUID ENTITY_UUID = new UUID(114514, 1919810);
 
-    public static void addArmor(Player player, Location location, Component name) {
+    public static void addArmorDisplay(Player player, Location location, Component name) {
         ServerPlayer sp = ((CraftPlayer) player).getHandle();
         sp.connection.send(new ClientboundAddEntityPacket(
             ENTITY_ID, ENTITY_UUID,
@@ -43,14 +43,14 @@ public class FakeArmorStandDisplay {
         )));
     }
 
-    public static void updateArmor(Player player, Component name) {
+    public static void updateArmorDisplay(Player player, Component name) {
         ServerPlayer sp = ((CraftPlayer) player).getHandle();
         sp.connection.send(new ClientboundSetEntityDataPacket(ENTITY_ID, List.of(
             SynchedEntityData.DataValue.create(get(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name)))
         )));
     }
 
-    public static void deleteArmor(Player player) {
+    public static void deleteArmorDisplay(Player player) {
         ServerPlayer sp = ((CraftPlayer) player).getHandle();
         sp.connection.send(new ClientboundRemoveEntitiesPacket(ENTITY_ID));
     }

@@ -26,21 +26,17 @@ public class BlockTunerPlugin extends JavaPlugin {
     public static ScheduledTask displayTask;
     public static String DATABASE_PATH;
 
-    public MessageUtil messageUtil = new MessageUtil(this);
-    public BlockTunerProtocol blockTunerProtocol = new BlockTunerProtocol();
-
     @Override
     public void onEnable() {
         plugin = this;
         DATABASE_PATH = new File(getDataFolder(), "playerdata.db").getAbsolutePath();
-        messageUtil.getMessengerManager().register(blockTunerProtocol);
+        MessageUtil.register(this, BlockTunerProtocol.class);
         callReload();
         StorageUtil.initDatabase();
-        messageUtil.enable();
         registerEvents();
         registerCommands();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            messageUtil.injectDirect(player);
+            MessageUtil.injectDirect(player);
             PlayerData.of(player);
         }
         displayTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, (task) -> new InfoDisplayTask().run(), 1, 2);
@@ -50,11 +46,8 @@ public class BlockTunerPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            messageUtil.uninjectDirect(player);
             StorageUtil.save(PlayerData.of(player));
         }
-        messageUtil.getMessengerManager().unregister(blockTunerProtocol);
-        messageUtil.disable();
         if (displayTask != null) {
             displayTask.cancel();
         }

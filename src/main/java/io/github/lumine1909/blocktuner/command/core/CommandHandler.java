@@ -59,10 +59,10 @@ public class CommandHandler {
             command.setExecutor(executor);
             command.setTabCompleter(executor);
             command.setAliases(Arrays.asList(annotation.aliases()));
+            //command.setPermission(annotation.permission()); We need apply I18N to the permission message.
             COMMAND_MAP.register("paperblocktuner", command);
         } catch (Exception e) {
-            plugin.getLogger().severe("Failed to register command handler for: " + annotation.name());
-            e.printStackTrace();
+            plugin.getSLF4JLogger().error("Failed to register command handler for: {}", annotation.name(), e);
         }
     }
 

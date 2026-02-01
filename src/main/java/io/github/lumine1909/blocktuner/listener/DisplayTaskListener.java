@@ -16,6 +16,6 @@ public class DisplayTaskListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        InfoDisplayTask.cache.remove(event.getPlayer().getUniqueId());
+        InfoDisplayTask.cacheTrackMap.remove(event.getPlayer().getUniqueId());
     }
 }
