@@ -94,7 +94,7 @@ public class BlockTunerProtocol extends MessageReceiver {
         int note = buf.readInt();
         Level world = player.level();
         if (world.getBlockState(pos).getBlock() == Blocks.NOTE_BLOCK) {
-            Bukkit.getScheduler().runTask(plugin, () -> TuneUtil.tune(player, (ServerLevel) world, pos, NoteUtil.byNote(note), Instrument.DEFAULT));
+            Bukkit.getScheduler().runTask(plugin, () -> TuneUtil.tune(player, (ServerLevel) world, pos, NoteUtil.byNote(note), Instrument.EMPTY));
         }
     }
 
