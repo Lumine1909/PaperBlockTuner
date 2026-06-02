@@ -21,13 +21,6 @@ public class InfoDisplayTask extends BukkitRunnable {
 
     public static final Map<UUID, Cache> cacheTrackMap = new HashMap<>();
 
-    @Override
-    public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            getUpdateStatus(player).runTask(player);
-        }
-    }
-
     private static UpdateStatus getUpdateStatus(Player player) {
         Block target = player.getTargetBlockExact(5);
         if (target == null || !(target.getBlockData() instanceof NoteBlock noteBlock)) {
@@ -64,16 +57,10 @@ public class InfoDisplayTask extends BukkitRunnable {
         cacheTrackMap.remove(player.getUniqueId());
     }
 
-    record Cache(Block block, Instrument instrument, byte note) {
-
-        public UpdateStatus getStatus(NoteBlock noteBlock, Block block) {
-            if (!this.block.equals(block)) {
-                return UpdateStatus.CREATE;
-            }
-            if (this.instrument.equals(noteBlock.getInstrument()) && this.note == noteBlock.getNote().getId()) {
-                return UpdateStatus.SKIP;
-            }
-            return UpdateStatus.UPDATE;
+    @Override
+    public void run() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            getUpdateStatus(player).runTask(player);
         }
     }
 
@@ -85,7 +72,8 @@ public class InfoDisplayTask extends BukkitRunnable {
             }
         }),
         UPDATE(player -> updateInfoDisplay(player, true)),
-        SKIP(player -> {});
+        SKIP(player -> {
+        });
 
         private final Consumer<Player> task;
 
@@ -95,6 +83,19 @@ public class InfoDisplayTask extends BukkitRunnable {
 
         public void runTask(Player player) {
             task.accept(player);
+        }
+    }
+
+    record Cache(Block block, Instrument instrument, byte note) {
+
+        public UpdateStatus getStatus(NoteBlock noteBlock, Block block) {
+            if (!this.block.equals(block)) {
+                return UpdateStatus.CREATE;
+            }
+            if (this.instrument.equals(noteBlock.getInstrument()) && this.note == noteBlock.getNote().getId()) {
+                return UpdateStatus.SKIP;
+            }
+            return UpdateStatus.UPDATE;
         }
     }
 }

@@ -11,6 +11,7 @@ error:
   invalid-noteblock-pos: '<red>Error: Cannot sync position outside the world</red>'
   not-facing-noteblock: '<red>Error: You are not facing a note block</red>'
   not-holding-noteblock: '<red>Error: You are not holding a note block</red>'
+  data-not-load: '<red>Error: Data not loaded yet</red>'
 
 settings:
   note: '<dark_aqua>Enable tuning stick to set note (right-click)</dark_aqua>'

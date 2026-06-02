@@ -1,11 +1,11 @@
 plugins {
     java
-    id("com.gradleup.shadow") version "9.3.1"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
+    id("com.gradleup.shadow") version "9.4.1"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
 }
 
 group = "io.github.lumine1909"
-version = "1.6.0"
+version = "1.7.0-EXPERIMENT"
 description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
@@ -13,18 +13,21 @@ repositories {
     gradlePluginPortal()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://maven.enginehub.org/repo/")
+    mavenLocal()
 }
 
 dependencies {
     paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
     implementation("io.github.lumine1909:messageutil:1.1.1")
+    implementation("io.github.lumine1909:reflexion:0.4.1")
+    implementation("com.example:Proxying:1.0.1")
     compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.5.11")
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.14.2")
     compileOnly("org.xerial:sqlite-jdbc:3.49.1.0")
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
 tasks {

@@ -1,10 +1,9 @@
 package io.github.lumine1909.blocktuner.data;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import io.github.lumine1909.blocktuner.gui.InstrumentTuneGui;
 import io.github.lumine1909.blocktuner.gui.NoteTuneGui;
 import io.github.lumine1909.blocktuner.gui.SettingsGui;
+import io.github.lumine1909.blocktuner.util.Message;
 import io.github.lumine1909.blocktuner.util.StorageUtil;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.NoteBlock;
@@ -16,11 +15,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerData {
 
-    public static final Cache<Player, PlayerData> PLAYER_DATA_CACHE = CacheBuilder.newBuilder().build();
+    public static final Map<Player, PlayerData> PLAYER_DATA_CACHE = new ConcurrentHashMap<>();
 
     public Player player;
     public UUID uuid;
@@ -42,18 +43,26 @@ public class PlayerData {
     }
 
     public static PlayerData of(Player player) {
-        if (PLAYER_DATA_CACHE.getIfPresent(player) == null) {
-            PLAYER_DATA_CACHE.put(player, StorageUtil.loadOrCreate(player));
+        if (!PLAYER_DATA_CACHE.containsKey(player)) {
+            player.sendMessage(Message.translatable("error.data-not-load"));
         }
-        return PLAYER_DATA_CACHE.getIfPresent(player);
+        return PLAYER_DATA_CACHE.get(player);
+    }
+
+    public static void create(Player player, boolean async) {
+        if (async) {
+            StorageUtil.loadOrCreate(player, data -> PLAYER_DATA_CACHE.put(player, data));
+        } else {
+            StorageUtil.syncLoadOrCreate(player, data -> PLAYER_DATA_CACHE.put(player, data));
+        }
     }
 
     public static void delete(Player player) {
-        PlayerData data = PLAYER_DATA_CACHE.getIfPresent(player);
+        PlayerData data = PLAYER_DATA_CACHE.get(player);
         if (data != null) {
             StorageUtil.save(data);
         }
-        PLAYER_DATA_CACHE.invalidate(player);
+        PLAYER_DATA_CACHE.remove(player);
     }
 
     public void startEdit(Block block, NoteBlock noteBlock, PlayerInteractEvent event) {

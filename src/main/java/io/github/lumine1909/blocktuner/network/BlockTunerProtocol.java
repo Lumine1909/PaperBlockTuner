@@ -9,7 +9,6 @@ import io.github.lumine1909.messageutil.api.MessageReceiver;
 import io.github.lumine1909.messageutil.object.PacketContext;
 import io.github.lumine1909.messageutil.object.PacketEvent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ServerboundPickItemFromBlockPacket;
@@ -30,7 +29,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
-import static io.github.lumine1909.blocktuner.util.ReflectionUtil.set;
 
 public class BlockTunerProtocol extends MessageReceiver {
 
@@ -61,7 +59,7 @@ public class BlockTunerProtocol extends MessageReceiver {
         int targetSlot = Inventory.isHotbarSlot(sourceSlot) ? sourceSlot : inventory.getSuitableHotbarSlot();
         if (sourceSlot != -1) {
             if (Inventory.isHotbarSlot(sourceSlot) && Inventory.isHotbarSlot(targetSlot)) {
-                set(inventory.getClass(), "selected", inventory, targetSlot);
+                inventory.setSelectedSlot(targetSlot);
             } else {
                 inventory.pickSlot(sourceSlot, targetSlot);
             }

@@ -1,5 +1,6 @@
 package io.github.lumine1909.blocktuner.display;
 
+import io.github.lumine1909.blocktuner.proxy.EntityProxy;
 import io.papermc.paper.adventure.PaperAdventure;
 import net.kyori.adventure.text.Component;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -7,7 +8,6 @@ import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
@@ -18,8 +18,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static io.github.lumine1909.blocktuner.util.ReflectionUtil.get;
 
 public class FakeArmorStandDisplay {
 
@@ -35,10 +33,10 @@ public class FakeArmorStandDisplay {
             EntityType.ARMOR_STAND, 0, Vec3.ZERO, 0
         ));
         sp.connection.send(new ClientboundSetEntityDataPacket(ENTITY_ID, List.of(
-            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_SHARED_FLAGS_ID", null), (byte) 32),
-            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name))),
-            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_CUSTOM_NAME_VISIBLE", null), true),
-            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_NO_GRAVITY", null), true),
+            SynchedEntityData.DataValue.create(EntityProxy.staticAccess.sharedFlagsId(), (byte) 32),
+            SynchedEntityData.DataValue.create(EntityProxy.staticAccess.customName(), Optional.of(PaperAdventure.asVanilla(name))),
+            SynchedEntityData.DataValue.create(EntityProxy.staticAccess.customNameVisible(), true),
+            SynchedEntityData.DataValue.create(EntityProxy.staticAccess.noGravity(), true),
             SynchedEntityData.DataValue.create(ArmorStand.DATA_CLIENT_FLAGS, (byte) 21)
         )));
     }
@@ -46,7 +44,7 @@ public class FakeArmorStandDisplay {
     public static void updateArmorDisplay(Player player, Component name) {
         ServerPlayer sp = ((CraftPlayer) player).getHandle();
         sp.connection.send(new ClientboundSetEntityDataPacket(ENTITY_ID, List.of(
-            SynchedEntityData.DataValue.create(get(Entity.class, "DATA_CUSTOM_NAME", null), Optional.of(PaperAdventure.asVanilla(name)))
+            SynchedEntityData.DataValue.create(EntityProxy.staticAccess.customName(), Optional.of(PaperAdventure.asVanilla(name)))
         )));
     }
 

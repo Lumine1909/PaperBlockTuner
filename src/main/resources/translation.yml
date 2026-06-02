@@ -11,6 +11,7 @@ error:
   invalid-noteblock-pos: '<red>错误: 无法同步超出世界的位置</red>'
   not-facing-noteblock: '<red>错误: 你没有面向音符盒</red>'
   not-holding-noteblock: '<red>错误: 你没有手持音符盒</red>'
+  data-not-load: '<red>错误: 数据未加载完成</red>'
 
 settings:
   note: '<dark_aqua>启用调音棒设置音高(右键)</dark_aqua>'
