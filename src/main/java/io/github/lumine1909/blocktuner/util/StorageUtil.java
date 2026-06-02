@@ -1,14 +1,17 @@
 package io.github.lumine1909.blocktuner.util;
 
 import io.github.lumine1909.blocktuner.data.PlayerData;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.function.Consumer;
 
 import static io.github.lumine1909.blocktuner.BlockTunerPlugin.DATABASE_PATH;
+import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
 public class StorageUtil {
 
@@ -23,17 +26,29 @@ public class StorageUtil {
         );
         """;
 
-    public static PlayerData loadOrCreate(Player player) {
+    public static void loadOrCreate(Player player, Consumer<PlayerData> consumer) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            syncLoadOrCreate(player, consumer);
+        });
+    }
+
+    public static void syncLoadOrCreate(Player player, Consumer<PlayerData> consumer) {
         PlayerData data = new PlayerData(player);
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_PATH)) {
             data.loadFromDatabase(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return data;
+        consumer.accept(data);
     }
 
     public static void save(PlayerData data) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            syncSave(data);
+        });
+    }
+
+    public static void syncSave(PlayerData data) {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_PATH)) {
             data.saveToDatabase(connection);
         } catch (SQLException e) {

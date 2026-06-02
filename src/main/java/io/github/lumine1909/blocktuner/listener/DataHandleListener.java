@@ -17,7 +17,7 @@ public class DataHandleListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        PlayerData.of(event.getPlayer());
+        PlayerData.create(event.getPlayer(), true);
     }
 
     @EventHandler

@@ -1,6 +1,7 @@
 package io.github.lumine1909.blocktuner.command.core;
 
 import io.github.lumine1909.blocktuner.BlockTunerPlugin;
+import io.github.lumine1909.reflexion.Method;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
@@ -8,7 +9,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -19,17 +19,9 @@ import static io.github.lumine1909.blocktuner.BlockTunerPlugin.plugin;
 
 public class CommandHandler {
 
-    private static final Constructor<PluginCommand> constructor$PluginCommand;
+    private static final Method<PluginCommand> constructor$PluginCommand = Method.of(PluginCommand.class, "<init>", PluginCommand.class, String.class, Plugin.class);
     private static final CommandMap COMMAND_MAP = Bukkit.getCommandMap();
 
-    static {
-        try {
-            constructor$PluginCommand = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
-            constructor$PluginCommand.setAccessible(true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static void registerCommands() {
         URL jarUrl = BlockTunerPlugin.class.getProtectionDomain().getCodeSource().getLocation();
@@ -55,7 +47,7 @@ public class CommandHandler {
         RegisterCommand annotation = clazz.getAnnotation(RegisterCommand.class);
         try {
             TabExecutor executor = (TabExecutor) clazz.getDeclaredConstructor().newInstance();
-            PluginCommand command = createCommand(annotation.name());
+            PluginCommand command = constructor$PluginCommand.invoke(null, annotation.name(), plugin);
             command.setExecutor(executor);
             command.setTabCompleter(executor);
             command.setAliases(Arrays.asList(annotation.aliases()));
@@ -63,14 +55,6 @@ public class CommandHandler {
             COMMAND_MAP.register("paperblocktuner", command);
         } catch (Exception e) {
             plugin.getSLF4JLogger().error("Failed to register command handler for: {}", annotation.name(), e);
-        }
-    }
-
-    private static PluginCommand createCommand(String name) {
-        try {
-            return constructor$PluginCommand.newInstance(name, plugin);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }

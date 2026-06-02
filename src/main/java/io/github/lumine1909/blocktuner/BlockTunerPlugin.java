@@ -37,7 +37,7 @@ public class BlockTunerPlugin extends JavaPlugin {
         registerCommands();
         for (Player player : Bukkit.getOnlinePlayers()) {
             MessageUtil.injectDirect(player);
-            PlayerData.of(player);
+            PlayerData.create(player, false);
         }
         displayTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, (task) -> new InfoDisplayTask().run(), 1, 2);
         new Metrics(this, 25453);
