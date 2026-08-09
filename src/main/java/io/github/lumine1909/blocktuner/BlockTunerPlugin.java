@@ -25,6 +25,7 @@ public class BlockTunerPlugin extends JavaPlugin {
     public static BlockTunerPlugin plugin;
     public static ScheduledTask displayTask;
     public static String DATABASE_PATH;
+    public static Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -40,7 +41,7 @@ public class BlockTunerPlugin extends JavaPlugin {
             PlayerData.create(player, false);
         }
         displayTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, (task) -> new InfoDisplayTask().run(), 1, 2);
-        new Metrics(this, 25453);
+        metrics = new Metrics(this, 25453);
     }
 
     @Override
@@ -50,6 +51,9 @@ public class BlockTunerPlugin extends JavaPlugin {
         }
         if (displayTask != null) {
             displayTask.cancel();
+        }
+        if (metrics != null) {
+            metrics.shutdown();
         }
     }
 

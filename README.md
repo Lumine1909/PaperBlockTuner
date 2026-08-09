@@ -18,9 +18,9 @@
 
 ### Requirements
 
-- Minecraft 1.20.5+
+- Minecraft 26.2
 - Paper and downstream server
-- Java 21+
+- Java 25+
 - Gradle (for building from source)
 
 ### Installation

@@ -1,11 +1,11 @@
 plugins {
     java
-    id("com.gradleup.shadow") version "9.4.1"
+    id("com.gradleup.shadow") version "9.6.1"
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
 }
 
 group = "io.github.lumine1909"
-version = "1.7.0-EXPERIMENT"
+version = "1.7.0"
 description = "Minecraft Note Block Tuning Plugin"
 
 repositories {
@@ -17,12 +17,12 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("26.2.build+")
     implementation("io.github.lumine1909:messageutil:1.1.1")
-    implementation("io.github.lumine1909:reflexion:0.4.1")
-    implementation("com.example:Proxying:1.0.1")
+    implementation("io.github.lumine1909:reflexion:0.5.2")
+    implementation(files("libs/Proxying-1.0.1.jar"))
     compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.5.11")
-    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.14.2")
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.15.3")
     compileOnly("org.xerial:sqlite-jdbc:3.49.1.0")
 }
 
@@ -35,7 +35,7 @@ tasks {
         dependsOn(shadowJar)
     }
     shadowJar {
-        archiveFileName.set("PaperBlockTuner-${version}-MC-1.21.11.jar")
+        archiveFileName.set("PaperBlockTuner-${version}+MC-26.2.jar")
         minimize()
     }
     withType<JavaCompile> {
@@ -47,7 +47,7 @@ tasks {
             "name" to project.name,
             "version" to project.version,
             "description" to project.description,
-            "apiVersion" to "1.20"
+            "apiVersion" to "26.2"
         )
         inputs.properties(props)
         filesMatching("plugin.yml") {
