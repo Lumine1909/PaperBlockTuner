@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("26.2.build+")
+    paperweight.paperDevBundle("26.2.build.+")
     implementation("io.github.lumine1909:messageutil:1.1.1")
     implementation("io.github.lumine1909:reflexion:0.5.2")
     implementation(files("libs/Proxying-1.0.1.jar"))

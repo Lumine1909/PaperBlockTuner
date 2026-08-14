@@ -89,6 +89,9 @@ public class BlockTunerProtocol extends MessageReceiver {
         event.setCancelled(true);
         ServerPlayer player = context.player();
         BlockPos pos = buf.readBlockPos();
+        if (!player.isWithinBlockInteractionRange(pos, 1.0F)) {
+            return;
+        }
         int note = buf.readInt();
         ServerLevel world = player.level();
         if (world.getBlockState(pos).getBlock() == Blocks.NOTE_BLOCK) {
