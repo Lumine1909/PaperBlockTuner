@@ -47,7 +47,7 @@ public class BlockTunerPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            StorageUtil.save(PlayerData.of(player));
+            StorageUtil.syncSave(PlayerData.of(player));
         }
         if (displayTask != null) {
             displayTask.cancel();
