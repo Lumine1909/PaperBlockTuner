@@ -22,9 +22,13 @@ public class StorageUtil {
             enable_stick_instrument BOOLEAN,
             enable_item_scroll BOOLEAN,
             enable_block_scroll BOOLEAN,
-            sync_instrument BOOLEAN
+            sync_instrument BOOLEAN,
+            copy_instrument BOOLEAN
         );
         """;
+
+    private static final String SQL_ADD_COPY_INSTRUMENT =
+        "ALTER TABLE playerdata ADD COLUMN copy_instrument BOOLEAN NOT NULL DEFAULT 0";
 
     public static void loadOrCreate(Player player, Consumer<PlayerData> consumer) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -57,12 +61,22 @@ public class StorageUtil {
     }
 
     public static void initDatabase() {
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_PATH)) {
-            try (Statement stmt = connection.createStatement()) {
-                stmt.executeUpdate(SQL_CREATE);
-            }
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_PATH);
+             Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(SQL_CREATE);
+            migrateDatabase(stmt);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void migrateDatabase(Statement statement) throws SQLException {
+        try {
+            statement.executeUpdate(SQL_ADD_COPY_INSTRUMENT);
+        } catch (SQLException e) {
+            if (!e.getMessage().contains("duplicate column name")) {
+                throw e;
+            }
         }
     }
 }

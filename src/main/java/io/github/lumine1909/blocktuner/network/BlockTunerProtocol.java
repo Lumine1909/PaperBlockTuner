@@ -1,6 +1,7 @@
 package io.github.lumine1909.blocktuner.network;
 
 import io.github.lumine1909.blocktuner.data.NoteBlockData;
+import io.github.lumine1909.blocktuner.data.PlayerData;
 import io.github.lumine1909.blocktuner.object.Instrument;
 import io.github.lumine1909.blocktuner.util.InstrumentUtil;
 import io.github.lumine1909.blocktuner.util.NoteUtil;
@@ -129,7 +130,7 @@ public class BlockTunerProtocol extends MessageReceiver {
             NoteBlockInstrument instrument = blockState.getValue(NoteBlock.INSTRUMENT);
             Integer note = blockState.getValue(NoteBlock.NOTE);
             NoteBlockData data = new NoteBlockData(note, InstrumentUtil.byMcName(instrument.name().toLowerCase()));
-            bukkitItemStack = data.apply(bukkitItemStack);
+            bukkitItemStack = data.apply(bukkitItemStack, PlayerData.of(player.getBukkitEntity()).copyInstrument);
             toPick = CraftItemStack.asNMSCopy(bukkitItemStack);
         } else {
             toPick = cloneItemStack;

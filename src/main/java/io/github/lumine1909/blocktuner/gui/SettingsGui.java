@@ -43,7 +43,7 @@ public class SettingsGui implements EditingGui {
             .build();
 
         settings = List.of(
-            NONE, NONE,
+            NONE,
             createToggleSetting(
                 "blocktuner.settings.note-tuning",
                 Material.STICK,
@@ -58,6 +58,14 @@ public class SettingsGui implements EditingGui {
                 data -> data.enableStickInstrumentTuning,
                 (data, value) -> data.enableStickInstrumentTuning = value
             ),
+            createToggleSetting(
+                "blocktuner.settings.copy-instrument",
+                Material.EMERALD_BLOCK,
+                "settings.copy-instrument",
+                data -> data.copyInstrument,
+                (data, value) -> data.copyInstrument = value
+            ),
+            NONE,
             createToggleSetting(
                 "blocktuner.settings.sync-instrument",
                 Material.PACKED_ICE,
@@ -79,7 +87,7 @@ public class SettingsGui implements EditingGui {
                 data -> data.enableBlockScrollTuning,
                 (data, value) -> data.enableBlockScrollTuning = value
             ),
-            NONE, NONE
+            NONE
         );
     }
 
@@ -99,8 +107,7 @@ public class SettingsGui implements EditingGui {
                     .fakeEnch(enabled)
                     .lore(List.of(enabled ? Message.translatable("settings.enabled") : Message.translatable("settings.disabled")))
                     .build();
-            },
-            data -> {
+            }, data -> {
                 if (data.player.hasPermission(permission)) {
                     setter.accept(data, !getter.apply(data));
                 }

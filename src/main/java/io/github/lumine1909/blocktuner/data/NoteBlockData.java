@@ -89,6 +89,10 @@ public class NoteBlockData {
     }
 
     public ItemStack apply(ItemStack itemStack) {
+        return apply(itemStack, true);
+    }
+
+    public ItemStack apply(ItemStack itemStack, boolean applyInstrument) {
         itemStack.editMeta(itemMeta -> {
             if (note == Note.EMPTY && instrument == Instrument.EMPTY) {
                 return;
@@ -102,6 +106,7 @@ public class NoteBlockData {
             if (note != Note.EMPTY) {
                 origin.setNote(note);
             }
+            Instrument instrument = applyInstrument ? this.instrument : Instrument.EMPTY;
             if (instrument != Instrument.EMPTY) {
                 origin.setInstrument(instrument);
             }
@@ -111,7 +116,7 @@ public class NoteBlockData {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             blockDataMeta.setBlockData(noteBlock);
         });
-        if (instrument == Instrument.DEFAULT) {
+        if (!applyInstrument || instrument == Instrument.DEFAULT || instrument == Instrument.EMPTY) {
             itemStack = InstrumentUtil.stripInstrument(itemStack);
         }
         return itemStack;

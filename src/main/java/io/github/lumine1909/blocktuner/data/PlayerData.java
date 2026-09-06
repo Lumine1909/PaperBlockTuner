@@ -23,14 +23,15 @@ public class PlayerData {
 
     public static final Map<Player, PlayerData> PLAYER_DATA_CACHE = new ConcurrentHashMap<>();
 
-    public Player player;
-    public UUID uuid;
+    public final Player player;
+    public final UUID uuid;
 
     public boolean enableStickNoteTuning = true;
     public boolean enableStickInstrumentTuning = true;
     public boolean enableItemScrollTuning = true;
     public boolean enableBlockScrollTuning = true;
     public boolean syncBlockInstrument = false;
+    public boolean copyInstrument = false;
     public boolean isItemScrollTuning = false;
     public boolean isBlockScrollTuning = false;
 
@@ -84,7 +85,7 @@ public class PlayerData {
     }
 
     public void saveToDatabase(Connection connection) throws SQLException {
-        String sql = "REPLACE INTO playerdata (uuid, enable_stick_note, enable_stick_instrument, enable_item_scroll, enable_block_scroll, sync_instrument) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "REPLACE INTO playerdata (uuid, enable_stick_note, enable_stick_instrument, enable_item_scroll, enable_block_scroll, sync_instrument, copy_instrument) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, uuid.toString());
             stmt.setBoolean(2, enableStickNoteTuning);
@@ -92,6 +93,7 @@ public class PlayerData {
             stmt.setBoolean(4, enableItemScrollTuning);
             stmt.setBoolean(5, enableBlockScrollTuning);
             stmt.setBoolean(6, syncBlockInstrument);
+            stmt.setBoolean(7, copyInstrument);
             stmt.executeUpdate();
         }
     }
@@ -107,6 +109,7 @@ public class PlayerData {
                 enableItemScrollTuning = rs.getBoolean("enable_item_scroll");
                 enableBlockScrollTuning = rs.getBoolean("enable_block_scroll");
                 syncBlockInstrument = rs.getBoolean("sync_instrument");
+                copyInstrument = rs.getBoolean("copy_instrument");
             }
         }
     }
